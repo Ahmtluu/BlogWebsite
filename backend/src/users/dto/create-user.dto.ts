@@ -5,6 +5,6 @@ export class CreateUserDto {
   username: string;
   fullName: string;
   email: string;
-  hash: string;
-  hashedRT: string;
+  password: string;
+
 }

@@ -4,6 +4,6 @@ export class User {
   username: string;
   fullName: string;
   email: string;
-  hash: string;
-  hashedRT: string;
+  password: string;
+
 }

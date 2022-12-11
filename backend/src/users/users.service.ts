@@ -14,12 +14,16 @@ export class UsersService {
     private jwtService: JwtService,
   ) {}
 
-  hashData(data: string) {
+  hashPassword(data: string){
     return bcrypt.hash(data, 10);
   }
 
+  checkPassword(userPassword, enteredPassword){
+    return bcrypt.compare(enteredPassword, userPassword);
+  }
+
   async signUp(usr: CreateUserDto) {
-    const password = await this.hashData(usr.hash);
+    const password = await this.hashPassword(usr.password);
     return await this.userModel
       .findOne({ email: usr.email })
       .exec()
@@ -33,8 +37,7 @@ export class UsersService {
           newUser.username = usr.username;
           newUser.fullName = usr.fullName;
           newUser.email = usr.email;
-          newUser.hash = password;
-          newUser.hashedRT = usr.hashedRT;
+          newUser.password = password;
           newUser.save();
           return newUser;
         }
@@ -47,7 +50,7 @@ export class UsersService {
       .exec()
       .then(async (user) => {
         if (user) {
-          const match = await bcrypt.compare(usr.hash, user.hash);
+          const match = await this.checkPassword(usr.password, user.password)
           if (match) {
             const payload = { username: user.username };
             return {
@@ -80,8 +83,13 @@ export class UsersService {
           user.username = usr.username;
           user.fullName = usr.fullName;
           user.email = usr.email;
-          user.hash = usr.hash;
-          user.hashedRT = usr.hashedRT;
+         
+          if(usr.password){
+            const match= this.checkPassword(usr.password, user.password)
+            if(match){
+              user.password = usr.password;
+            }
+          }
           user.save();
           return user;
         } else {
