@@ -69,8 +69,8 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 - Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
-mongodb+srv://AhmtMtlu:<password>@blogcluster.hk9lvhg.mongodb.net/?retryWrites=true&w=majority
+
 
 Nest is [MIT licensed](LICENSE).
 
-oHMQePD9oovXPquf
+
