@@ -1,4 +1,4 @@
 # BlogWebsite WIP 
-Frontend:React 
-Backend:NestJS
-Database:MongoDB
+###### Frontend:React 
+###### Backend:NestJS
+###### Database:MongoDB
