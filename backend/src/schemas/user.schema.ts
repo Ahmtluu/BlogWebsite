@@ -6,6 +6,8 @@ export type UserDocument = HydratedDocument<User>;
 @Schema()
 export class User {
   @Prop()
+  profileImg:String
+  @Prop()
   createdAt!: Date;
   @Prop()
   updatedAt!: Date;

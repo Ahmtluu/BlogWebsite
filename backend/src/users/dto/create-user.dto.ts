@@ -1,10 +1,9 @@
 export class CreateUserDto {
-  date: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  profileImg:String
   username: string;
   fullName: string;
   email: string;
   password: string;
-
+  createdAt: Date;
+  updatedAt: Date;
 }

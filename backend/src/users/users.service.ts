@@ -32,12 +32,13 @@ export class UsersService {
           return 'ExistingUser';
         } else {
           const newUser = new this.userModel(usr);
-          newUser.createdAt = new Date();
-          newUser.updatedAt = new Date();
           newUser.username = usr.username;
+          newUser.profileImg = usr.profileImg;
           newUser.fullName = usr.fullName;
           newUser.email = usr.email;
           newUser.password = password;
+          newUser.createdAt = new Date();
+          newUser.updatedAt = new Date();
           newUser.save();
           return newUser;
         }
@@ -50,11 +51,14 @@ export class UsersService {
       .exec()
       .then(async (user) => {
         if (user) {
-          const match = await this.checkPassword(usr.password, user.password)
+          const match =  this.checkPassword(usr.password, user.password);
+          console.log(match.data)
           if (match) {
-            const payload = { username: user.username };
             return {
-              access_token: this.jwtService.sign(payload),
+              access_token: this.jwtService.sign({
+                username: user.username,
+                sub: user.id,
+              }),
             };
           } else {
             return 'Error';
@@ -80,6 +84,7 @@ export class UsersService {
       .then(async (user) => {
         if (user) {
           user.updatedAt = new Date();
+          user.profileImg = usr.profileImg;
           user.username = usr.username;
           user.fullName = usr.fullName;
           user.email = usr.email;
