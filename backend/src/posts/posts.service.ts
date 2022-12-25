@@ -10,34 +10,36 @@ export class PostsService {
   constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}
 
   async create(pst: CreatePostDto) {
-    return this.postModel
+    return await this.postModel
       .findOne({ title: pst.title })
       .exec()
       .then(async (post) => {
         if (!post) {
           const newPost = new this.postModel(post);
-          newPost.cover = pst.cover;
           newPost.title = pst.title;
+          newPost.content = pst.content;
+          newPost.cover = pst.cover;
+          newPost.category = pst.category;
           newPost.createdBy = pst.createdBy;
           newPost.createdDate = new Date();
-          newPost.content = pst.content;
           newPost.save();
+          return newPost;
         } else {
           return 'PostExist';
         }
       });
   }
 
-  findAll() {
-    return this.postModel.find().exec();
+  async findAll() {
+    return await this.postModel.find().exec();
   }
 
-  findOne(id: number) {
-    return this.postModel.findOne({ id: id }).exec();
+  async findOne(id: string) {
+    return this.postModel.findById(id).exec();
   }
 
-  update(id: number, post: UpdatePostDto) {
-    this.postModel
+  async update(id: string, post: UpdatePostDto) {
+    await this.postModel
       .findOne({ id: id })
       .exec()
       .then((foundedPost) => {
@@ -55,8 +57,8 @@ export class PostsService {
       });
   }
 
-  remove(id: number) {
-    return this.postModel.findOneAndRemove({ id: id }).exec();
+  async remove(id: string) {
+    return await this.postModel.findOneAndRemove({ id: id }).exec();
   }
 }
 declare global {

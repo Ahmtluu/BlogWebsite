@@ -1,62 +1,79 @@
-import React, { Component } from "react";
-import { Col, Container, Row, Form } from "react-bootstrap";
-import { MDBInput, MDBCol, MDBRow, MDBFile } from "mdb-react-ui-kit";
+import React, { useState } from "react";
 import profileImage from "../assets/images/profileImage.png";
+import { useForm } from "react-hook-form";
+import CustomPostTable from "./CustomPostTable";
 
 export default function CustomProfileForm() {
+  const { register, handleSubmit } = useForm();
+  const onSubmit = (d) => {
+    alert(JSON.stringify(d));
+  };
+
   return (
-    <Row>
-      <Col md={6}>
-        <Container
-          className="my-3 d-flex justify-content-center"
-          style={{
-            width: "300px",
-            height: "300px",
-            overflow: "hidden",
-          }}
-        >
+    <div className=" container py-2">
+      <div className="row">
+        <div className="col-lg-4 text-center">
           <img
             src={profileImage}
-            className="rounded-circle "
-            style={{
-              width: "100%",
-              height: "100%",
-              boxFit: "contain",
-            }}
-            alt="Avatar"
-          />
-        </Container>
-      </Col>
-      <Col md={4}>
-        <form>
-          <MDBFile label="Profile Image" id="customFile" />
-          <MDBRow className="mb-1 mt-4">
-            <MDBCol>
-              <MDBInput name="firstName" label="First name" />
-            </MDBCol>
-            <MDBCol>
-              <MDBInput name="lastName" label="Last name" />
-            </MDBCol>
-          </MDBRow>
-          <MDBInput
-            className=""
-            type="email"
-            name="userEmail"
-            label="Email address"
-          />
-          <MDBInput
-            className="mt-1"
-            type="password"
-            name="userPassword"
-            label="Password"
-          />
-          <MDBRow>
-            <button class="btn btn-success  mx-2" type="submit">
-              Update
-            </button>
-          </MDBRow>
-        </form>
-      </Col>
-    </Row>
+            alt="avatar"
+            className="rounded-circle img-fluid mt-2"
+            style={{ width: "60%", height: "80%" }}
+          />{" "}
+        </div>
+        <div className="col-lg-8">
+          <div className="mb-4">
+            <div className="card-body">
+              <div className="row">
+                <div className="col-sm-3">
+                  <p className="mb-0">Full Name</p>
+                </div>
+                <div className="col-sm-9">
+                  <p className="text-muted mb-0">Johnatan Smith</p>
+                </div>
+              </div>
+              <hr />
+              <div className="row">
+                <div className="col-sm-3">
+                  <p className="mb-0">Email</p>
+                </div>
+                <div className="col-sm-9">
+                  <p className="text-muted mb-0">example@example.com</p>
+                </div>
+              </div>
+              <hr />
+              <div className="row">
+                <div className="col-sm-3">
+                  <p className="mb-0">Phone</p>
+                </div>
+                <div className="col-sm-9">
+                  <p className="text-muted mb-0">(097) 234-5678</p>
+                </div>
+              </div>
+              <hr />
+              <div className="row">
+                <div className="col-sm-3">
+                  <p className="mb-0">Mobile</p>
+                </div>
+                <div className="col-sm-9">
+                  <p className="text-muted mb-0">(098) 765-4321</p>
+                </div>
+              </div>
+              <hr />
+              <div className="row">
+                <div className="col-sm-3">
+                  <p className="mb-0">Address</p>
+                </div>
+                <div className="col-sm-9">
+                  <p className="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="row">
+        <CustomPostTable />
+      </div>
+    </div>
   );
 }

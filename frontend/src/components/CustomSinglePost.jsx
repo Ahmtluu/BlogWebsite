@@ -1,74 +1,58 @@
-import React, { Component } from "react";
-import { Col, Image, Container, Row } from "react-bootstrap";
-import profileImage from "../assets/images/profileImage.png";
+import React from "react";
+import { Col, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-
-export default function CustomSinglePost({ title, content }) {
-  const styles = {
-    imageContainer: {
-      width: "100%",
-      height: "260px",
-      overflow: "hidden",
-      backgroundColor: "teal",
-      padding: "0px",
-      margin: "0px",
-      borderRadius: "10px",
-    },
-    cardImage: {
-      width: "100%",
-      height: "100%",
-      boxFit: "contain",
-    },
-
-    avatarImageColumn: {
-      width: "48px",
-      height: "48px",
-      overflow: "hidden",
-      borderRadius: "50px",
-      padding: "0px",
-      margin: "0px",
-    },
-    avatarImage: {
-      width: "100%",
-      height: "100%",
-      boxFit: "contain",
-    },
-  };
-
+import "./CustomSinglePost.css";
+export default function CustomSinglePost({
+  title,
+  cover,
+  postId,
+  content,
+  category,
+  createdBy,
+}) {
+  const capitalizedCategory =
+    category.charAt(0).toUpperCase() + category.slice(1);
   return (
     <>
-      <Col md={6} lg={4} className="mb-4">
-        <Container style={styles.imageContainer}>
-          <Image
-            style={styles.cardImage}
-            className="img-fluid"
-            src={"https://picsum.photos/536/354"}
-          />
-        </Container>
-        <Link
-          to={`categories/travel`}
-          style={{ textDecoration: "none", color: "black" }}
-        >
+      <Col md={6} className="mb-4">
+        <Link to={`posts/${postId}`} className="link" relative="path">
+          <div className="imageContainer">
+            <Image className="cardImage img-fluid" alt="cover" src={cover} />
+          </div>
+        </Link>
+        <Link to={`categories/${category}`} className="link" relative="path">
           <h6 className="mt-2">
-            Travel
+            {capitalizedCategory}
             <span className="text-muted"> - July 2, 2022</span>
           </h6>
         </Link>
-        <Link to={`blog/1`} style={{ textDecoration: "none", color: "black" }}>
+        <Link to={`posts/${postId}`} className="link" relative="path">
           <h2>{title}</h2>
-          <p>{content}</p>
+          <p className="text">{content}</p>
         </Link>
         <Link
-          to={`/profile`}
-          style={{ textDecoration: "none", color: "black" }}
+          to={`author/${createdBy.username}`}
+          className="link"
+          relative="path"
         >
-          <Row className="d-flex px-3">
-            <Container style={styles.avatarImageColumn}>
-              <Image style={styles.avatarImage} src={profileImage}></Image>
-            </Container>
-            <Col className="flex-column justify-content-center align-items-center mt-1">
-              <h6 className="m-0">Ahmet MUTLU</h6>
-              <h6 className="text-muted">CEO and founder</h6>
+          <Row className="">
+            <Col md="auto">
+              {" "}
+              {createdBy.profileImg ? (
+                <div className="avatarImageColumn">
+                  <img
+                    className="avatarImage"
+                    alt="cover"
+                    src={`http://localhost:3001/images/${createdBy.profileImg}`}
+                  ></img>
+                </div>
+              ) : (
+                <div></div>
+              )}
+            </Col>
+            <Col md="auto" className="">
+              <h6 className="m-0">{createdBy.username}</h6>
+              <h6 className="text-muted">CEO and FOUNDER</h6>
             </Col>
           </Row>
         </Link>

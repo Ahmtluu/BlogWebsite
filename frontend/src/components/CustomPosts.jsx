@@ -1,46 +1,48 @@
-import React, { Component } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Row } from "react-bootstrap";
 import CustomSinglePost from "./CustomSinglePost";
+import { GetAllPosts } from "../services/PostService";
 
-export default function CustomPosts() {
+function CustomPosts() {
+  const [posts, setPosts] = useState([]);
+
+  const fetchData = async () => {
+    const response = await GetAllPosts();
+    setPosts(response);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <>
       <Container>
         {" "}
-        <h2 class="pb-2 mt-4 border-bottom">Features with title</h2>
+        <h2 className="pb-2 mt-4 border-bottom">Features with title</h2>
       </Container>
       <Container>
         <Row className="d-flex justify-content-between align-items-md-stretch py-2">
-          <CustomSinglePost
-            title="Heading"
-            content="Some representative placeholder content for the three columns of text below the carousel. This is the first column."
-          />
-          <CustomSinglePost
-            title="Heading"
-            content="Some representative placeholder content for the three columns of text below the carousel. This is the first column."
-          />
-          <CustomSinglePost
-            title="Heading"
-            content="Some representative placeholder content for the three columns of text below the carousel. This is the first column."
-          />
-          <CustomSinglePost
-            title="Heading"
-            content="Some representative placeholder content for the three columns of text below the carousel. This is the first column."
-          />
-          <CustomSinglePost
-            title="Heading"
-            content="And lastly this, the third column of representative placeholder content."
-          />
-          <CustomSinglePost
-            title="Heading"
-            content="And lastly this, the third column of representative placeholder content."
-            buttonText="View details &raquo"
-          />
+          {posts.map((post) => {
+            return (
+              <CustomSinglePost
+                key={post._id}
+                postId={post._id}
+                title={post.title}
+                content={post.content}
+                category={post.category}
+                createdBy={post.createdBy}
+                cover={post.cover}
+              />
+            );
+          })}
         </Row>
       </Container>
     </>
   );
 }
+
+export default CustomPosts;
 
 {
   /*

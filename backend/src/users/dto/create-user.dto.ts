@@ -1,5 +1,6 @@
 export class CreateUserDto {
-  profileImg:String
+  profileImg: String;
+  about:String;
   username: string;
   fullName: string;
   email: string;

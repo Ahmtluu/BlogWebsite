@@ -1,0 +1,44 @@
+.imageContainer {
+  width: 100%;
+  height: 260px;
+  overflow: hidden;
+  background-color: grey;
+  padding: 0px;
+  margin: 0px;
+  border-radius: 10px;
+}
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.link {
+  text-decoration: none;
+  color: black;
+}
+.link:hover {
+  text-decoration: none;
+  color: grey;
+}
+.text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.avatarImageColumn {
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  border-radius: 50px;
+  padding: 0px;
+  margin: 0px;
+}
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

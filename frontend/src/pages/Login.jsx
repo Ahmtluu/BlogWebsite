@@ -1,25 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import loginImage from "../assets/images/loginImage.jpg";
+import { useForm } from "react-hook-form";
+import { UserLogin } from "../services/UserService";
+import { cookies } from "../services/UserService";
+import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
-export default function Login() {
-  const [inputs, setInputs] = useState({});
+function Login() {
+  const { register, handleSubmit } = useForm();
+  let navigate = useNavigate();
 
-  const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setInputs((values) => ({ ...values, [name]: value }));
+  const OnSubmit = async (data) => {
+    await UserLogin(data).then((response) => {
+      const jwt_token = response.data["access_token"];
+      cookies.set("jwt_authorization", jwt_token);
+      cookies.set("isAuth", true);
+      const decoded = jwt_decode(jwt_token);
+      navigate(`/profile/${decoded.username}`);
+    });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    alert(inputs);
-  };
   return (
     <Container>
       <Row>
         <Col md={6}>
-          <img src={loginImage} alt="Image" class="img-fluid" />
+          <img src={loginImage} alt="Image" className="img-fluid" />
         </Col>
         <Col md={6} className="d-flex align-items-center">
           <Container
@@ -31,27 +37,27 @@ export default function Login() {
               margin: "0px",
             }}
           >
-            <div class="mb-2">
+            <div className="mb-2">
               <h3>Welcome</h3>
             </div>
-            <form action="/login" method="post">
-              <div class="form-group first mb-4">
-                <label for="username">Username</label>
+            <form onSubmit={handleSubmit(OnSubmit)}>
+              <div className="form-group first mb-4">
+                <label>Username</label>
                 <input
                   type="text"
-                  class="form-control"
-                  id="username"
+                  className="form-control"
+                  {...register("email")}
                   style={{
                     width: "50%",
                   }}
                 />
               </div>
-              <div class="form-group last mb-4">
-                <label for="password">Password</label>
+              <div className="form-group last mb-4">
+                <label>Password</label>
                 <input
                   type="password"
-                  class="form-control"
-                  id="password"
+                  className="form-control"
+                  {...register("password")}
                   style={{
                     width: "50%",
                   }}
@@ -61,7 +67,7 @@ export default function Login() {
               <input
                 type="submit"
                 value="Log In"
-                class="btn text-white btn-block btn-primary"
+                className="btn text-white btn-block btn-primary"
                 style={{
                   width: "40%",
                 }}
@@ -73,3 +79,4 @@ export default function Login() {
     </Container>
   );
 }
+export default Login;

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { User } from './user.schema';
 
 export type PostDocument = HydratedDocument<Post>;
 
@@ -7,16 +8,14 @@ export type PostDocument = HydratedDocument<Post>;
 export class Post {
   @Prop()
   cover: string;
-
   @Prop()
   title: string;
-
+  @Prop()
+  category: string;
   @Prop()
   content: string;
-
   @Prop()
-  createdBy: string;
-
+  createdBy: User
   @Prop()
   createdDate: Date;
 }

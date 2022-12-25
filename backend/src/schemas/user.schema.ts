@@ -16,6 +16,8 @@ export class User {
   @Prop()
   fullName: String;
   @Prop()
+  about:String;
+  @Prop()
   email: string;
   @Prop()
   password: string;

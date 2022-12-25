@@ -1,4 +1,4 @@
-import * as dotenv from 'dotenv'
+import * as dotenv from 'dotenv';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PostsModule } from './posts/posts.module';
@@ -7,7 +7,7 @@ import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-dotenv.config()
+dotenv.config();
 
 @Module({
   imports: [
@@ -22,6 +22,5 @@ dotenv.config()
   ],
 })
 export class AppModule {}
-
 
 console.log();

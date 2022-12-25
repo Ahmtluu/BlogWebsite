@@ -14,11 +14,11 @@ export class UsersService {
     private jwtService: JwtService,
   ) {}
 
-  hashPassword(data: string){
+  hashPassword(data: string) {
     return bcrypt.hash(data, 10);
   }
 
-  checkPassword(userPassword, enteredPassword){
+  checkPassword(userPassword, enteredPassword) {
     return bcrypt.compare(enteredPassword, userPassword);
   }
 
@@ -33,6 +33,7 @@ export class UsersService {
         } else {
           const newUser = new this.userModel(usr);
           newUser.username = usr.username;
+          newUser.about = usr.about;
           newUser.profileImg = usr.profileImg;
           newUser.fullName = usr.fullName;
           newUser.email = usr.email;
@@ -51,13 +52,14 @@ export class UsersService {
       .exec()
       .then(async (user) => {
         if (user) {
-          const match =  this.checkPassword(usr.password, user.password);
-          console.log(match.data)
+          const match = this.checkPassword(usr.password, user.password);
           if (match) {
             return {
               access_token: this.jwtService.sign({
+                id: user.id,
                 username: user.username,
-                sub: user.id,
+                profileImage: user.profileImg,
+                about: user.about,
               }),
             };
           } else {
@@ -73,11 +75,26 @@ export class UsersService {
     return this.userModel.find().exec();
   }
 
-  findOne(id: number) {
-    return this.userModel.findOne({ id: id }).exec();
+  findOne(usrname: string) {
+    return this.userModel
+      .findOne({ username: usrname })
+      .exec()
+      .then(async (user) => {
+        if (user) {
+          const currentUser = {
+            username: user.username,
+            fullName: user.fullName,
+            profileImg: user.profileImg,
+            about: user.about,
+          };
+          return currentUser;
+        } else {
+          return "User doesn't exist!";
+        }
+      });
   }
 
-  update(id: number, usr: UpdateUserDto) {
+  update(id: string, usr: UpdateUserDto) {
     return this.userModel
       .findOne({ id: id })
       .exec()
@@ -88,10 +105,10 @@ export class UsersService {
           user.username = usr.username;
           user.fullName = usr.fullName;
           user.email = usr.email;
-         
-          if(usr.password){
-            const match= this.checkPassword(usr.password, user.password)
-            if(match){
+
+          if (usr.password) {
+            const match = this.checkPassword(usr.password, user.password);
+            if (match) {
               user.password = usr.password;
             }
           }
@@ -103,7 +120,7 @@ export class UsersService {
       });
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return this.userModel.findOneAndRemove({ id: id });
   }
 }
