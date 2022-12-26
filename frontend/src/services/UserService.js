@@ -15,11 +15,30 @@ const UserLogin = (dummyData) => {
   }
 };
 //User update
+const UpdateUser = async (id, dummyData) => {
+  const token = cookies.get("jwt_authorization");
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  const bodyparameters = {
+    username: dummyData.username,
+    email: dummyData.email,
+    profileImage: dummyData.profileImg[0].name,
+    about: dummyData.about,
+    password: dummyData.password,
+  };
+  return await axios
+    .patch(`/user/${id}`, bodyparameters, config)
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 //Get Current User
-const GetCurrentUser = async (username) => {
+const GetCurrentUser = async (userId) => {
   return await axios
-    .get(`/user/${username}`)
+    .get(`/user/${userId}`)
     .then((response) => {
       return response.data;
     })
@@ -28,4 +47,4 @@ const GetCurrentUser = async (username) => {
     });
 };
 
-export { UserLogin, GetCurrentUser, cookies };
+export { UserLogin, GetCurrentUser, UpdateUser, cookies };

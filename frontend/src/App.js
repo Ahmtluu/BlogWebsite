@@ -25,7 +25,7 @@ function App() {
         <Route path="author/:username" element={<Author />} />
         <Route element={<ProtectedRoutes />}>
           <Route path="posts/edit/:id" element={<PostEdit />} />
-          <Route path="profile/:username" element={<Profile />} />
+          <Route path="profile/:id" element={<Profile />} />
         </Route>
       </Routes>
     </Router>

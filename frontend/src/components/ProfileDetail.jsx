@@ -3,13 +3,21 @@ import profileImage from "../assets/images/profileImage.png";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { cookies } from "../services/UserService";
+import { UpdateUser } from "../services/UserService";
 
 export default function ProfileDetail({ currentUser }) {
+  const { register, handleSubmit } = useForm();
   const [show, setShow] = useState(false);
 
   let isLoggedIn = cookies.get("isAuth");
+  console.log(currentUser);
 
   const onHandleChange = () => {
+    setShow(!show);
+  };
+
+  const onSubmitHandle = async (data) => {
+    UpdateUser(currentUser.userId, data);
     setShow(!show);
   };
 
@@ -64,51 +72,86 @@ export default function ProfileDetail({ currentUser }) {
       ) : (
         <></>
       )}
+
       <Modal show={show} size={"xl"} onHide={onHandleChange}>
         <Modal.Header>
           <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
-        <Modal.Body scrollable={true}>
+        <Modal.Body>
           <Form>
             <Row>
               <Col>
                 <Form.Group controlId="formFile" className="mb-3">
                   <Form.Label>Profile Image</Form.Label>
-                  <Form.Control type="file" />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>Username</Form.Label>
-                  <Form.Control type="email" placeholder="Username" />
+                  <input
+                    type="file"
+                    className="form-control"
+                    {...register("profileImg")}
+                  />
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>Full Name</Form.Label>
-                  <Form.Control type="password" placeholder="Full Name" />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" placeholder="Password" />
+                <Form.Group className="mb-3">
+                  <Form.Label>Email</Form.Label>
+                  <input
+                    type="email"
+                    id="formEmail"
+                    defaultValue={currentUser.email}
+                    className="form-control"
+                    {...register("email")}
+                  />
                 </Form.Group>
               </Col>
-
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlTextarea1"
-              >
-                <Form.Label>Example textarea</Form.Label>
-                <Form.Control as="textarea" rows={3} />
-              </Form.Group>
             </Row>
+            <Row>
+              <Col>
+                <Form.Group className="mb-3">
+                  <Form.Label>Username</Form.Label>
+                  <input
+                    type="text"
+                    id="formUsername"
+                    defaultValue={currentUser.username}
+                    className="form-control"
+                    {...register("username")}
+                  />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group className="mb-3">
+                  <Form.Label>Password</Form.Label>
+                  <input
+                    type="password"
+                    id="formPassword"
+                    className="form-control"
+                    {...register("password")}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Form.Group className="mb-3">
+              <Form.Label>About</Form.Label>
+              <textarea
+                defaultValue={currentUser.about}
+                className="form-control"
+                id="formAboutArea"
+                {...register("about")}
+                rows="3"
+              />
+            </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onHandleChange}>
             Close
           </Button>
-          <Button variant="primary">Save Changes</Button>
+          <Button
+            variant="primary"
+            type="submit"
+            onClick={handleSubmit(onSubmitHandle)}
+          >
+            Save Changes
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

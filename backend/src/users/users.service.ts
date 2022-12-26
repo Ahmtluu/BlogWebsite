@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -18,8 +18,8 @@ export class UsersService {
     return bcrypt.hash(data, 10);
   }
 
-  checkPassword(userPassword, enteredPassword) {
-    return bcrypt.compare(enteredPassword, userPassword);
+  checkPassword(enteredPassword, hashedPassword) {
+    return bcrypt.compare(enteredPassword, hashedPassword);
   }
 
   async signUp(usr: CreateUserDto) {
@@ -52,21 +52,22 @@ export class UsersService {
       .exec()
       .then(async (user) => {
         if (user) {
-          const match = this.checkPassword(usr.password, user.password);
+          const match = await this.checkPassword(usr.password, user.password);
           if (match) {
             return {
               access_token: this.jwtService.sign({
-                id: user.id,
+                sub: user.id,
                 username: user.username,
-                profileImage: user.profileImg,
-                about: user.about,
               }),
             };
           } else {
-            return 'Error';
+            throw new HttpException(
+              'UnauthorizedException',
+              HttpStatus.FORBIDDEN,
+            );
           }
         } else {
-          return 'User not found';
+          throw new HttpException('NotFoundException', HttpStatus.NOT_FOUND);
         }
       });
   }
@@ -75,14 +76,16 @@ export class UsersService {
     return this.userModel.find().exec();
   }
 
-  findOne(usrname: string) {
+  findOne(id: string) {
     return this.userModel
-      .findOne({ username: usrname })
+      .findOne({ _id: id })
       .exec()
       .then(async (user) => {
         if (user) {
           const currentUser = {
+            userId: user._id,
             username: user.username,
+            email: user.email,
             fullName: user.fullName,
             profileImg: user.profileImg,
             about: user.about,
@@ -96,7 +99,7 @@ export class UsersService {
 
   update(id: string, usr: UpdateUserDto) {
     return this.userModel
-      .findOne({ id: id })
+      .findOne({ _id: id })
       .exec()
       .then(async (user) => {
         if (user) {
@@ -109,11 +112,21 @@ export class UsersService {
           if (usr.password) {
             const match = this.checkPassword(usr.password, user.password);
             if (match) {
-              user.password = usr.password;
+              const password = await this.hashPassword(usr.password);
+              user.password = password;
             }
           }
           user.save();
-          return user;
+
+          return {
+            access_token: this.jwtService.sign({
+              id: user.id,
+              username: user.username,
+              email: user.email,
+              profileImage: user.profileImg,
+              about: user.about,
+            }),
+          };
         } else {
           return "User doesn't exist!";
         }
@@ -121,7 +134,7 @@ export class UsersService {
   }
 
   remove(id: string) {
-    return this.userModel.findOneAndRemove({ id: id });
+    return this.userModel.findOneAndRemove({ _id: id });
   }
 }
 

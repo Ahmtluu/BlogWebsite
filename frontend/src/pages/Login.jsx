@@ -5,19 +5,20 @@ import { useForm } from "react-hook-form";
 import { UserLogin } from "../services/UserService";
 import { cookies } from "../services/UserService";
 import { useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
-
 function Login() {
   const { register, handleSubmit } = useForm();
   let navigate = useNavigate();
 
   const OnSubmit = async (data) => {
     await UserLogin(data).then((response) => {
-      const jwt_token = response.data["access_token"];
-      cookies.set("jwt_authorization", jwt_token);
-      cookies.set("isAuth", true);
-      const decoded = jwt_decode(jwt_token);
-      navigate(`/profile/${decoded.username}`);
+      if (response.status === 201) {
+        const jwt_token = response.data["access_token"];
+        cookies.set("jwt_authorization", jwt_token);
+        cookies.set("isAuth", true);
+        navigate(`/`);
+      } else {
+        cookies.set("isAuth", false);
+      }
     });
   };
 

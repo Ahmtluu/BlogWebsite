@@ -15,7 +15,7 @@ export class Post {
   @Prop()
   content: string;
   @Prop()
-  createdBy: User
+  createdBy: User;
   @Prop()
   createdDate: Date;
 }

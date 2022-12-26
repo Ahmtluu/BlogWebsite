@@ -30,17 +30,22 @@ export class PostsService {
       });
   }
 
-  async findAll() {
-    return await this.postModel.find().exec();
+  findAll() {
+    return this.postModel.find().exec();
   }
 
-  async findOne(id: string) {
-    return this.postModel.findById(id).exec();
+  findOne(id: string) {
+    return this.postModel
+      .findOne({ _id: id })
+      .exec()
+      .then((post) => {
+        return post;
+      });
   }
 
   async update(id: string, post: UpdatePostDto) {
     await this.postModel
-      .findOne({ id: id })
+      .findOne({ _id: id })
       .exec()
       .then((foundedPost) => {
         if (foundedPost) {
@@ -58,7 +63,7 @@ export class PostsService {
   }
 
   async remove(id: string) {
-    return await this.postModel.findOneAndRemove({ id: id }).exec();
+    return await this.postModel.findOneAndRemove({ _id: id }).exec();
   }
 }
 declare global {

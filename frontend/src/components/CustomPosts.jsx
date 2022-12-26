@@ -21,23 +21,27 @@ function CustomPosts() {
         {" "}
         <h2 className="pb-2 mt-4 border-bottom">Features with title</h2>
       </Container>
-      <Container>
-        <Row className="d-flex justify-content-between align-items-md-stretch py-2">
-          {posts.map((post) => {
-            return (
-              <CustomSinglePost
-                key={post._id}
-                postId={post._id}
-                title={post.title}
-                content={post.content}
-                category={post.category}
-                createdBy={post.createdBy}
-                cover={post.cover}
-              />
-            );
-          })}
-        </Row>
-      </Container>
+      {posts ? (
+        <Container>
+          <Row className="d-flex justify-content-between align-items-md-stretch py-2">
+            {posts.map((post) => {
+              return (
+                <CustomSinglePost
+                  key={post._id}
+                  postId={post._id}
+                  title={post.title}
+                  content={post.content}
+                  category={post.category}
+                  createdBy={post.createdBy}
+                  cover={post.cover}
+                />
+              );
+            })}
+          </Row>
+        </Container>
+      ) : (
+        <Container>Loading...</Container>
+      )}
     </>
   );
 }
