@@ -78,16 +78,16 @@ export class UsersService {
 
   findOne(id: string) {
     return this.userModel
-      .findOne({ _id: id })
+      .findOne({ id: id })
       .exec()
       .then(async (user) => {
         if (user) {
           const currentUser = {
             userId: user._id,
             username: user.username,
-            email: user.email,
             fullName: user.fullName,
             profileImg: user.profileImg,
+            email: user.email,
             about: user.about,
           };
           return currentUser;
@@ -99,15 +99,15 @@ export class UsersService {
 
   update(id: string, usr: UpdateUserDto) {
     return this.userModel
-      .findOne({ _id: id })
+      .findOne({ id: id })
       .exec()
       .then(async (user) => {
         if (user) {
           user.updatedAt = new Date();
-          user.profileImg = usr.profileImg;
           user.username = usr.username;
           user.fullName = usr.fullName;
           user.email = usr.email;
+          user.about = usr.about;
 
           if (usr.password) {
             const match = this.checkPassword(usr.password, user.password);
@@ -118,15 +118,7 @@ export class UsersService {
           }
           user.save();
 
-          return {
-            access_token: this.jwtService.sign({
-              id: user.id,
-              username: user.username,
-              email: user.email,
-              profileImage: user.profileImg,
-              about: user.about,
-            }),
-          };
+          return user;
         } else {
           return "User doesn't exist!";
         }

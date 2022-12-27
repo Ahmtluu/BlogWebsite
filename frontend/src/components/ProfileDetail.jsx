@@ -5,19 +5,18 @@ import { useForm } from "react-hook-form";
 import { cookies } from "../services/UserService";
 import { UpdateUser } from "../services/UserService";
 
-export default function ProfileDetail({ currentUser }) {
+export default function ProfileDetail({ currentUser, getProfileData }) {
   const { register, handleSubmit } = useForm();
   const [show, setShow] = useState(false);
 
   let isLoggedIn = cookies.get("isAuth");
-  console.log(currentUser);
-
   const onHandleChange = () => {
     setShow(!show);
   };
 
   const onSubmitHandle = async (data) => {
     UpdateUser(currentUser.userId, data);
+    getProfileData();
     setShow(!show);
   };
 
@@ -34,16 +33,15 @@ export default function ProfileDetail({ currentUser }) {
               style={{ width: "150px" }}
             >
               <img
-                src={`http://localhost:3001/images/${currentUser.profileImage}`}
-                alt="Generic placeholder image"
+                src={`http://localhost:3001/images/${currentUser.profileImg}`}
+                alt="Generic placeholder"
                 className="img-fluid img-thumbnail mt-4 mb-2"
                 style={{ width: "150px", zIndex: "1" }}
               />
               {isLoggedIn ? (
                 <button
                   type="button"
-                  className="btn btn-outline-dark"
-                  data-mdb-ripple-color="dark"
+                  className="btn btn-dark"
                   onClick={onHandleChange}
                   style={{ zIndex: "1" }}
                 >
@@ -79,31 +77,7 @@ export default function ProfileDetail({ currentUser }) {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Row>
-              <Col>
-                <Form.Group controlId="formFile" className="mb-3">
-                  <Form.Label>Profile Image</Form.Label>
-                  <input
-                    type="file"
-                    className="form-control"
-                    {...register("profileImg")}
-                  />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group className="mb-3">
-                  <Form.Label>Email</Form.Label>
-                  <input
-                    type="email"
-                    id="formEmail"
-                    defaultValue={currentUser.email}
-                    className="form-control"
-                    {...register("email")}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
+            <Row className="w-50">
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Username</Form.Label>
@@ -113,6 +87,20 @@ export default function ProfileDetail({ currentUser }) {
                     defaultValue={currentUser.username}
                     className="form-control"
                     {...register("username")}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Form.Group className="mb-3">
+                  <Form.Label>Email</Form.Label>
+                  <input
+                    type="email"
+                    id="formEmail"
+                    defaultValue={currentUser.email}
+                    className="form-control"
+                    {...register("email")}
                   />
                 </Form.Group>
               </Col>

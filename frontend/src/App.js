@@ -6,16 +6,20 @@ import AboutMe from "./pages/AboutMe";
 import PostEdit from "./pages/PostEdit";
 import Profile from "./pages/Profile";
 import CustomNavbar from "./components/CustomNavbar";
-
 import ProtectedRoutes from "./ProtectedRoutes";
 import CategorisedPost from "./pages/CategorisedPost";
 import Author from "./pages/Author";
+import { cookies } from "./services/UserService";
+
+import { useLocation } from "react-router-dom";
 
 function App() {
-  const pathname = window.location.pathname;
+  let location = useLocation();
+  let isLoggedIn = cookies.get("isAuth");
+  console.log(isLoggedIn);
   return (
-    <Router>
-      <CustomNavbar />
+    <>
+      {location.pathname !== "/login" ? <CustomNavbar /> : <></>}
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="posts/:postId" element={<PostDetail />} />
@@ -23,12 +27,12 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="aboutme" element={<AboutMe />} />
         <Route path="author/:username" element={<Author />} />
-        <Route element={<ProtectedRoutes />}>
+        <Route element={<ProtectedRoutes isLoggedIn={isLoggedIn} />}>
           <Route path="posts/edit/:id" element={<PostEdit />} />
           <Route path="profile/:id" element={<Profile />} />
         </Route>
       </Routes>
-    </Router>
+    </>
   );
 }
 

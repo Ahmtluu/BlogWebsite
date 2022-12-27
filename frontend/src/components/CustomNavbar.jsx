@@ -28,7 +28,7 @@ function CustomNavbar() {
       setCurrentScrollHeight(newScrollHeight);
     };
     getCurrentId();
-  }, [isLoggedIn]);
+  }, []);
 
   const opacity = Math.min(currentScrollHeight / 50, 1);
   const duration = 300;

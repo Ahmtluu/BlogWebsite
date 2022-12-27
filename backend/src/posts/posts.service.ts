@@ -44,7 +44,7 @@ export class PostsService {
   }
 
   async update(id: string, post: UpdatePostDto) {
-    await this.postModel
+    return await this.postModel
       .findOne({ _id: id })
       .exec()
       .then((foundedPost) => {

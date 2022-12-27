@@ -24,7 +24,6 @@ const UpdateUser = async (id, dummyData) => {
   const bodyparameters = {
     username: dummyData.username,
     email: dummyData.email,
-    profileImage: dummyData.profileImg[0].name,
     about: dummyData.about,
     password: dummyData.password,
   };

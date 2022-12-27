@@ -13,13 +13,12 @@ function Profile() {
   const [currentUser, setCurrentUser] = useState();
   const { id } = useParams();
 
+  const getProfileData = async () => {
+    await GetCurrentUser(id).then((response) => {
+      setCurrentUser(response);
+    });
+  };
   useEffect(() => {
-    const getProfileData = async () => {
-      await GetCurrentUser(id).then((response) => {
-        setCurrentUser(response);
-      });
-    };
-
     getProfileData();
   }, []);
 
@@ -29,9 +28,18 @@ function Profile() {
         <div className="row d-flex justify-content-center align-items-center h-100">
           {currentUser ? (
             <div className="col">
-              <ProfileDetail currentUser={currentUser} />
-              <ProfileAbout about={currentUser.about} />
-              <ProfileRecent />
+              <ProfileDetail
+                currentUser={currentUser}
+                getProfileData={getProfileData}
+              />
+              <ProfileAbout
+                getProfileData={getProfileData}
+                about={currentUser.about}
+              />
+              <ProfileRecent
+                getProfileData={getProfileData}
+                currentUser={currentUser}
+              />
             </div>
           ) : (
             <Container>Loading...</Container>

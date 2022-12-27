@@ -1,83 +1,86 @@
-import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
-import loginImage from "../assets/images/loginImage.jpg";
+import React, { useState } from "react";
+import { Col, Container, Row, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { UserLogin } from "../services/UserService";
 import { cookies } from "../services/UserService";
 import { useNavigate } from "react-router-dom";
+import backgroundImage from "../assets/images/loginBackground.svg";
 function Login() {
   const { register, handleSubmit } = useForm();
+  const [isDone, setStatus] = useState(true);
   let navigate = useNavigate();
 
   const OnSubmit = async (data) => {
-    await UserLogin(data).then((response) => {
-      if (response.status === 201) {
+    try {
+      await UserLogin(data).then((response) => {
         const jwt_token = response.data["access_token"];
         cookies.set("jwt_authorization", jwt_token);
-        cookies.set("isAuth", true);
+        cookies.set("isAuth", "true");
         navigate(`/`);
-      } else {
-        cookies.set("isAuth", false);
-      }
-    });
+      });
+    } catch (error) {
+      setStatus(false);
+    }
   };
 
   return (
-    <Container>
-      <Row>
-        <Col md={6}>
-          <img src={loginImage} alt="Image" className="img-fluid" />
-        </Col>
-        <Col md={6} className="d-flex align-items-center">
-          <Container
-            fluid={true}
-            style={{
-              paddingTop: "32px",
-              width: "500px",
-              height: "360px",
-              margin: "0px",
-            }}
-          >
-            <div className="mb-2">
-              <h3>Welcome</h3>
-            </div>
-            <form onSubmit={handleSubmit(OnSubmit)}>
-              <div className="form-group first mb-4">
-                <label>Username</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  {...register("email")}
-                  style={{
-                    width: "50%",
-                  }}
-                />
-              </div>
-              <div className="form-group last mb-4">
-                <label>Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  {...register("password")}
-                  style={{
-                    width: "50%",
-                  }}
-                />
-              </div>
-
-              <input
-                type="submit"
-                value="Log In"
-                className="btn text-white btn-block btn-primary"
-                style={{
-                  width: "40%",
-                }}
-              />
-            </form>
+    <Col
+      style={{
+        height: "100vh",
+        widht: "100vh",
+        backgroundImage: `url(${backgroundImage})`,
+      }}
+      className=" d-flex flex-column justify-content-center align-items-center "
+    >
+      <Row className="w-25 h-50 ">
+        <Container
+          style={{
+            border: "solid",
+            borderWidth: "5px",
+            borderRadius: "15px",
+            borderColor: `rgba(73, 85, 121, 0.2)`,
+          }}
+        >
+          <Container className="pt-4">
+            <h2 className="text-center pb-4">Welcome</h2>
           </Container>
-        </Col>
+          <Form onSubmit={handleSubmit(OnSubmit)}>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <input
+                type="text"
+                className="form-control"
+                {...register("email")}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <input
+                type="password"
+                className="form-control"
+                {...register("password")}
+              />
+            </Form.Group>
+
+            <Container className="d-flex justify-content-end p-0">
+              <Button variant="dark" type="submit" className="w-50">
+                Login
+              </Button>
+            </Container>
+          </Form>
+        </Container>
       </Row>
-    </Container>
+      {isDone === false ? (
+        <Row className="w-25 pt-2">
+          <div className="alert alert-danger" role="alert">
+            Girmiş olduğun email veya parola hatalı. Lütfen kontrol et.
+          </div>
+        </Row>
+      ) : (
+        <></>
+      )}
+    </Col>
   );
 }
 export default Login;

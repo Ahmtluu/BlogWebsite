@@ -25,25 +25,30 @@ const GetPost = async (id) => {
     });
 };
 //Post create
-const PostCreate = (postEntry) => {
-  const authKey = cookies.get("jwt_token");
+const PostCreate = (formData, currentUser) => {
+  const authKey = cookies.get("jwt_authorization");
   const config = {
     headers: { Authorization: `Bearer ${authKey}` },
   };
   return axios.post(
     "/post",
     {
-      title: postEntry.title,
-      cover: postEntry.cover,
-      content: postEntry.content,
-      createdBy: postEntry.createdBy,
+      title: formData.title,
+      cover: formData.cover,
+      content: formData.content,
+      category: formData.category,
+      createdBy: {
+        _id: currentUser.userId,
+        username: currentUser.username,
+        profileImg: currentUser.profileImg,
+      },
     },
     config
   );
 };
 //Post update
-const PostUpdate = (postEntry, id) => {
-  const authKey = cookies.get("jwt_token");
+const PostUpdate = (postEntry, id, currentUser) => {
+  const authKey = cookies.get("jwt_authorization");
   const config = {
     headers: { Authorization: `Bearer ${authKey}` },
   };
@@ -53,7 +58,7 @@ const PostUpdate = (postEntry, id) => {
       title: postEntry.title,
       cover: postEntry.cover,
       content: postEntry.content,
-      createdBy: postEntry.createdBy,
+      createdBy: currentUser.createdBy,
     },
     config
   );
