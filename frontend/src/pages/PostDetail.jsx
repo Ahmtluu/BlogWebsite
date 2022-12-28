@@ -4,19 +4,23 @@ import { Container } from "react-bootstrap";
 import { GetPost } from "../services/PostService";
 
 function PostDetail() {
-  const [currentPost, setCurrentPost] = useState();
-  let { postId } = useParams();
+  const [currentPost, setCurrentPost] = useState({});
+  let params = useParams(); 
+  let id = params._id;
 
-  const fetchPost = async () => {
-    const response = await GetPost(postId);
-    setCurrentPost(response);
+  const getSelectedPost =  async () => {
+     await GetPost(id).then((response)=>{
+      setCurrentPost(response)
+     });
+    
   };
+
   useEffect(() => {
-    fetchPost();
-  }, []);
+    getSelectedPost();
+  },[]);
 
   {
-    return currentPost != null ? (
+    return Object.keys(currentPost).length > 0 ? (
       <Container>
         <h5>{currentPost.title}</h5>
         <p>{currentPost.content}</p>

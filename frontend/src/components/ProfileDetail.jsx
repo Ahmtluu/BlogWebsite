@@ -1,28 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import profileImage from "../assets/images/profileImage.png";
-import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import { Modal, Button, Form, Row, Col, Container } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { cookies } from "../services/UserService";
 import { UpdateUser } from "../services/UserService";
+import Lightbox from 'react-18-image-lightbox';
+import 'react-18-image-lightbox/style.css';
+import "./ProfileDetail.css";
 
 export default function ProfileDetail({ currentUser, getProfileData }) {
   const { register, handleSubmit } = useForm();
-  const [show, setShow] = useState(false);
+  const [modalShow, setModelShow] = useState(false);
+  const [imageModalShow, setImageShow] = useState(false);
 
-  let isLoggedIn = cookies.get("isAuth");
   const onHandleChange = () => {
-    setShow(!show);
+    setModelShow(!modalShow);
   };
+  const onImageHandleChange=()=>{
+    setImageShow(!imageModalShow)
+
+  }
 
   const onSubmitHandle = async (data) => {
     UpdateUser(currentUser.userId, data);
     getProfileData();
-    setShow(!show);
+    setModelShow(!modalShow);
   };
 
+
   return (
-    <>
-      {currentUser ? (
+    <Container>
+      {currentUser && (
         <>
           <div
             className="rounded-top text-white d-flex flex-row"
@@ -32,24 +40,26 @@ export default function ProfileDetail({ currentUser, getProfileData }) {
               className="ms-4 mt-5 d-flex flex-column"
               style={{ width: "150px" }}
             >
-              <img
-                src={`http://localhost:3001/images/${currentUser.profileImg}`}
-                alt="Generic placeholder"
-                className="img-fluid img-thumbnail mt-4 mb-2"
-                style={{ width: "150px", zIndex: "1" }}
-              />
-              {isLoggedIn ? (
-                <button
-                  type="button"
-                  className="btn btn-dark"
-                  onClick={onHandleChange}
-                  style={{ zIndex: "1" }}
-                >
-                  Edit profile
-                </button>
-              ) : (
-                <></>
-              )}
+     
+                <Button className=" mt-4 mb-2 p-0 bg-dark shadow-none btn-link rounded" onClick={onImageHandleChange}>
+                  {" "}
+                  <img
+                    src={`http://localhost:3001/images/${currentUser.profileImg}`}
+                    alt="Profile"
+                    className="image"
+                    style={{ width: "100%", height: "100%", }}
+                  />
+                </Button>
+     
+
+              <Button
+                type="button"
+                className="btn btn-dark"
+                onClick={onHandleChange}
+                
+              >
+                Edit profile
+              </Button>
             </div>
             <div className="ms-3" style={{ marginTop: "150px" }}>
               <h5>{currentUser.username}</h5>
@@ -67,11 +77,9 @@ export default function ProfileDetail({ currentUser, getProfileData }) {
             </div>
           </div>
         </>
-      ) : (
-        <></>
       )}
 
-      <Modal show={show} size={"xl"} onHide={onHandleChange}>
+      <Modal show={modalShow} size={"xl"} onHide={onHandleChange}>
         <Modal.Header>
           <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
@@ -142,6 +150,6 @@ export default function ProfileDetail({ currentUser, getProfileData }) {
           </Button>
         </Modal.Footer>
       </Modal>
-    </>
+      </Container>
   );
 }

@@ -10,32 +10,31 @@ export default function CustomSinglePost({
   category,
   createdBy,
 }) {
-  const capitalizedCategory =
-    category.charAt(0).toUpperCase() + category.slice(1);
+
   return (
     <>
-      <Col md={6} className="mb-4">
-        <Link to={`posts/${postId}`} className="link" relative="path">
+      <Col md={10} className="mb-4 border-bottom">
+        <Link to={`/posts/${postId}`} className="link" relative="path">
           <div className="imageContainer">
             <Image className="cardImage img-fluid" alt="cover" src={cover} />
           </div>
         </Link>
         <Link to={`categories/${category}`} className="link" relative="path">
           <h6 className="mt-2">
-            {capitalizedCategory}
+            {category}
             <span className="text-muted"> - July 2, 2022</span>
           </h6>
         </Link>
-        <Link to={`posts/${postId}`} className="link" relative="path">
+        <Link to={`/posts/${postId}`} className="link" relative="path">
           <h2>{title}</h2>
           <p className="text">{content}</p>
         </Link>
         <Link
-          to={`author/${createdBy.username}`}
+          to={`/author/${createdBy.username}`}
           className="link"
           relative="path"
         >
-          <Row className="">
+          <Row className="mb-2">
             <Col md="auto">
               {" "}
               {createdBy.profileImg ? (
@@ -56,6 +55,8 @@ export default function CustomSinglePost({
             </Col>
           </Row>
         </Link>
+                
+
       </Col>
     </>
   );

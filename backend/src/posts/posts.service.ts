@@ -36,16 +36,13 @@ export class PostsService {
 
   findOne(id: string) {
     return this.postModel
-      .findOne({ _id: id })
-      .exec()
-      .then((post) => {
-        return post;
-      });
+      .findById({ _id: id })
+      .exec();
   }
 
   async update(id: string, post: UpdatePostDto) {
     return await this.postModel
-      .findOne({ _id: id })
+      .findOne({ id: id })
       .exec()
       .then((foundedPost) => {
         if (foundedPost) {
@@ -63,7 +60,7 @@ export class PostsService {
   }
 
   async remove(id: string) {
-    return await this.postModel.findOneAndRemove({ _id: id }).exec();
+    return await this.postModel.findOneAndRemove({ id: id }).exec();
   }
 }
 declare global {

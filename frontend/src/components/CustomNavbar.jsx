@@ -53,11 +53,11 @@ function CustomNavbar() {
             <Navbar.Collapse className="justify-content-end">
               <Nav>
                 <NavDropdown title="Actions" active={true}>
-                  {pathname.includes("/profile/") ? (
+                  {pathname.includes("/profile") ? (
                     <div></div>
                   ) : (
                     <>
-                      <Dropdown.Item href={`profile/${currentUserId}`}>
+                      <Dropdown.Item href={`/profile/${currentUserId}`}>
                         Profile
                       </Dropdown.Item>
                       <Dropdown.Divider />

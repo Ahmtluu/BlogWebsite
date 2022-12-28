@@ -14,8 +14,8 @@ const GetAllPosts = async () => {
 };
 
 //Get Single POST
-const GetPost = async (id) => {
-  return await axios
+const GetPost =  (id) => {
+  return axios
     .get(`/post/${id}`)
     .then((response) => {
       return response.data;
@@ -60,7 +60,7 @@ const PostUpdate = (postEntry, id, currentUser) => {
       content: postEntry.content,
       createdBy: currentUser.createdBy,
     },
-    config
+    config  
   );
 };
 //Post delete
