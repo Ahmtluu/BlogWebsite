@@ -47,29 +47,20 @@ const PostCreate = (formData, currentUser) => {
   );
 };
 //Post update
-const PostUpdate = (postEntry, id, currentUser) => {
+const PostUpdate = (formData, currentUser, postId) => {
   const authKey = cookies.get("jwt_authorization");
   const config = {
     headers: { Authorization: `Bearer ${authKey}` },
   };
-  return axios.patch(
-    `/post/${id}`,
-    {
-      title: postEntry.title,
-      cover: postEntry.cover,
-      content: postEntry.content,
-      createdBy: currentUser.createdBy,
-    },
-    config  
-  );
+console.log(formData)
 };
 //Post delete
-const PostDelete = (id) => {
-  const authKey = cookies.get("jwt_token");
+const PostDelete = async (id) => {
+  const authKey = cookies.get("jwt_authorization");
   const config = {
     headers: { Authorization: `Bearer ${authKey}` },
   };
-  return axios.post(`/post/${id}`, config);
+  return await axios.delete(`/post/${id}`, config);
 };
 
 export { GetAllPosts, GetPost, PostCreate, PostUpdate, PostDelete };

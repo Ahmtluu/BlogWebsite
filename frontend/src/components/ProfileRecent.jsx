@@ -1,152 +1,133 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Row, Col, Form, Card } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import {
+  Modal,
+  Button,
+  Row,
+  Col,
+  Form,
+  Card,
+  Container,
+} from "react-bootstrap";
+
 import { PostCreate } from "../services/PostService";
-import Select from "react-select";
-import Categories from "./Categories";
-import { GetAllPosts } from "../services/PostService";
+
+import { GetAllPosts, PostDelete,PostUpdate } from "../services/PostService";
+import { FaSync } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
+import CustomModal from "./CustomModal";
 
 export default function ProfileRecent({ currentUser, getProfileData }) {
-  const [show, setShow] = useState(false);
+  const [addNewShow, setAddNewShow] = useState(false);
+  const [updateShow, setUpdateShow] = useState(false);
   const [userPosts, setUserPosts] = useState();
-  const { setValue, handleSubmit } = useForm();
-  const onHandleChange = () => {
-    setShow(!show);
-  };
+  const [selectedPost, setPost]=useState({})
 
   useEffect(() => {
-    const getReleativePost = async () => {
-      await GetAllPosts().then((response) => {
-        setUserPosts(response);
-      });
-    };
-
-    return () => {
-      getReleativePost();
-    };
+    getReleativePost();
   }, []);
 
-  const onSubmitHandle = async (formData) => {
+  const onAddPostHandle = () => {
+    setAddNewShow(!addNewShow);
+  };
+  const onUpdatePostHandle = () => {
+    
+    setUpdateShow(!updateShow);
+
+  };
+
+  const getReleativePost = async () => {
+    await GetAllPosts().then((response) => {
+      setUserPosts(response);
+    });
+  };
+
+  const onPostDelete = async (id) => {
+    await PostDelete(id).then(() => {
+      getReleativePost();
+    });
+  };
+
+  const onPostUpdateSubmit= async (formData, postId) => {
+    PostUpdate(formData, currentUser, postId);
+    getReleativePost();
+   
+  };
+
+  const onPostSubmit= async (formData) => {
     PostCreate(formData, currentUser);
-    getProfileData();
-    setShow(!show);
+    getReleativePost();
+    setAddNewShow(!addNewShow);
   };
 
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <p className="lead fw-normal mb-0">Recent Posts</p>
-
         <div className="d-flex">
           {" "}
           <button
             type="button"
             className="btn btn-outline-dark"
             data-mdb-ripple-color="dark"
-            onClick={onHandleChange}
+            onClick={onAddPostHandle}
           >
             Add new
           </button>
+          <CustomModal
+            item=""
+            mShow={addNewShow}
+            hide={onAddPostHandle}
+            name="Add New"
+            onSubmitHandle={onPostSubmit}
+          />
         </div>
-
-        <Modal show={show} size={"xl"} onHide={onHandleChange}>
-          <Modal.Header>
-            <Modal.Title>Create New</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Row className="w-100">
-                <Col>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Cover</Form.Label>
-                    <input
-                      type="file"
-                      id="formCover"
-                      className="form-control"
-                      onChange={(e) => {
-                        setValue("cover", e.target.value);
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Title</Form.Label>
-                    <input
-                      type="title"
-                      id="formTitle"
-                      className="form-control"
-                      onChange={(e) => {
-                        setValue("title", e.target.value);
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Category</Form.Label>
-                    <Select
-                      onChange={(e) => {
-                        setValue("category", e.value);
-                      }}
-                      options={Categories}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Content</Form.Label>
-                <textarea
-                  className="form-control"
-                  onChange={(e) => {
-                    setValue("content", e.target.value);
-                  }}
-                  id="formAboutArea"
-                  rows="3"
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={onHandleChange}>
-              Close
-            </Button>
-            <Button
-              variant="primary"
-              type="submit"
-              onClick={handleSubmit(onSubmitHandle)}
-            >
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
       </div>
       <Row>
-      {userPosts &&
-      
-        userPosts.map((post) => {
-          return (
-            
-          <Col md={4}>
-           <Card className="mb-2">
-              <Card.Img variant="top" src="holder.js/100px180" />
-              <Card.Body>
-                <Card.Title>{post.title}</Card.Title>
-                <Card.Text style={{
-                  height:"125px"
-                }}>
-                 {post.content}
-                </Card.Text>
-                <Button variant="primary">Go somewhere</Button>
-              </Card.Body>
-            </Card></Col>
-           
-          );
-        })}
-        </Row>
+        {userPosts &&
+          userPosts.map((post) => {
+            return (
+              <Col md={6} key={post._id}>
+                <Card className="mb-2">
+                  <Card.Img variant="top" src="https://picsum.photos/536/354" />
+                  <Card.Body>
+                    <Card.Title>{post.title}</Card.Title>
+                    <Container className="d-flex justify-content-evenly">
+                      {" "}
+                      <Button
+                        variant="dark"
+                        className="d-flex align-items-center justify-content-around w-25 no-border"
+                        onClick={(e) => {
+                          setPost(post)
+                          onUpdatePostHandle()
+                        }}
+                      >
+                        <FaSync />
+                        Update
+                      </Button>
+                      <Button
+                        variant="danger"
+                        className="d-flex align-items-center justify-content-around w-25"
+                        onClick={(e) => {
+                          onPostDelete(post._id);
+                        }}
+                      >
+                        <FaTrash />
+                        Delete{" "}
+                      </Button>
+                    </Container>
+                  </Card.Body>
+                </Card>
+                <CustomModal
+            item={selectedPost}
+            mShow={updateShow}
+            hide={onUpdatePostHandle}
+            name={selectedPost.title}
+            onSubmitHandle={onPostUpdateSubmit}
+          />
+              </Col>
+            );
+          })}
+      </Row>
     </>
   );
 }

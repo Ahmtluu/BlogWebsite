@@ -52,13 +52,13 @@ function CustomNavbar() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-end">
               <Nav>
-                <NavDropdown title="Actions" active={true}>
+                <NavDropdown title="Eylemler" active={true}>
                   {pathname.includes("/profile") ? (
                     <div></div>
                   ) : (
                     <>
                       <Dropdown.Item href={`/profile/${currentUserId}`}>
-                        Profile
+                        Profil
                       </Dropdown.Item>
                       <Dropdown.Divider />
                     </>
@@ -72,7 +72,7 @@ function CustomNavbar() {
                       navigate("/");
                     }}
                   >
-                    Logout
+                    Çıkış
                   </Dropdown.Item>
                 </NavDropdown>
               </Nav>

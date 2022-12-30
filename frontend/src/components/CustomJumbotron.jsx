@@ -20,8 +20,8 @@ export default function CustomCarrousel() {
     <Container style={{minHeight:"640px"}}>
       <Row>
         <Col lg={6} className="mt-4 align-self-center">
-          <h1 className="display-4 fst-italic mt-4">
-            Title of a longer featured blog post
+          <h1 className="display-3 fst-italic mt-4 bold">
+          Cours Après Tes Rêves...
           </h1>
           <p className="lead my-3">
             Multiple lines of text that form the lede, informing new readers

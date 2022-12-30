@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row } from "react-bootstrap";
 import CustomSinglePost from "./CustomSinglePost";
 import { GetAllPosts } from "../services/PostService";
+import { CircularProgress } from "react-loading-indicators";
 
 function CustomPosts() {
   const [posts, setPosts] = useState([]);
@@ -17,16 +18,11 @@ function CustomPosts() {
 
   return (
     <>
-      <Container>
-        {" "}
-        <h2 className="pb-2 mt-4 border-bottom">Features with title</h2>
-      </Container>
-      {posts.length > 0 ? (
+      {posts && posts.length > 0 ? (
         <Container>
           <Row className="d-flex justify-content-between align-items-md-stretch py-2">
             {posts.map((post) => {
                 return (
-                  
                   <CustomSinglePost
                     key={post._id}
                     postId={post._id}
@@ -35,6 +31,7 @@ function CustomPosts() {
                     category={post.category}
                     createdBy={post.createdBy}
                     cover={post.cover}
+                    createdAt={post.createdDate}
                   />
                 );
 
@@ -42,7 +39,9 @@ function CustomPosts() {
           </Row>
         </Container>
       ) : (
-        <Container>Loading...</Container>
+         <Container className="d-flex justify-content-center">
+          <CircularProgress size="small" variant="dotted" color="#495579"/>
+          </Container>
       )}
     </>
   );

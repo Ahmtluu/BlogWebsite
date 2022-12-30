@@ -42,7 +42,7 @@ export class PostsService {
 
   async update(id: string, post: UpdatePostDto) {
     return await this.postModel
-      .findOne({ id: id })
+      .findOne({ _id: id })
       .exec()
       .then((foundedPost) => {
         if (foundedPost) {
@@ -60,7 +60,7 @@ export class PostsService {
   }
 
   async remove(id: string) {
-    return await this.postModel.findOneAndRemove({ id: id }).exec();
+    return await this.postModel.findOneAndRemove({ _id: id }).exec();
   }
 }
 declare global {

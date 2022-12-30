@@ -42,11 +42,11 @@ function Login() {
           }}
         >
           <Container className="pt-4">
-            <h2 className="text-center pb-4">Welcome</h2>
+            <h2 className="text-center pb-4">Hoşgeldin!</h2>
           </Container>
           <Form onSubmit={handleSubmit(OnSubmit)}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
+              <Form.Label>Email Adresi</Form.Label>
               <input
                 type="text"
                 className="form-control"
@@ -55,7 +55,7 @@ function Login() {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
+              <Form.Label>Şifre</Form.Label>
               <input
                 type="password"
                 className="form-control"
@@ -63,7 +63,7 @@ function Login() {
               />
             </Form.Group>
 
-            <Container className="d-flex justify-content-end p-0">
+            <Container className="d-flex justify-content-end p-0 mb-2">
               <Button variant="dark" type="submit" className="w-50">
                 Login
               </Button>

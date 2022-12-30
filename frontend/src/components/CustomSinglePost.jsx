@@ -9,7 +9,10 @@ export default function CustomSinglePost({
   content,
   category,
   createdBy,
+  createdAt
 }) {
+
+  createdAt = createdAt.substring(0, 10);
 
   return (
     <>
@@ -22,7 +25,7 @@ export default function CustomSinglePost({
         <Link to={`categories/${category}`} className="link" relative="path">
           <h6 className="mt-2">
             {category}
-            <span className="text-muted"> - July 2, 2022</span>
+            <span className="text-muted"> - {createdAt}</span>
           </h6>
         </Link>
         <Link to={`/posts/${postId}`} className="link" relative="path">
