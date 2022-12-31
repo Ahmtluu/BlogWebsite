@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
-  Modal,
   Button,
   Row,
   Col,
-  Form,
   Card,
   Container,
 } from "react-bootstrap";

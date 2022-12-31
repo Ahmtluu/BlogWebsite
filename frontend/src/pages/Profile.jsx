@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import jwt_decode from "jwt-decode";
-import CustomSinglePost from "../components/CustomSinglePost";
 import CustomFooter from "../components/CustomFooter";
 import ProfileAbout from "../components/ProfileAbout";
 import ProfileRecent from "../components/ProfileRecent";
 import ProfileDetail from "../components/ProfileDetail";
-import { cookies, GetCurrentUser } from "../services/UserService";
+import { GetCurrentUser } from "../services/UserService";
 import { Container } from "react-bootstrap";
 import { useParams } from "react-router";
 
@@ -20,7 +18,7 @@ function Profile() {
   };
   useEffect(() => {
     getProfileData();
-  }, []);
+  });
 
   return (
     <>

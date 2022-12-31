@@ -1,10 +1,7 @@
-import React, { useState, useEffect,useRef } from "react";
-import profileImage from "../assets/images/profileImage.png";
+import React, { useState} from "react";
 import { Modal, Button, Form, Row, Col, Container } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { cookies } from "../services/UserService";
 import { UpdateUser } from "../services/UserService";
-import Lightbox from 'react-18-image-lightbox';
 import 'react-18-image-lightbox/style.css';
 import "./ProfileDetail.css";
 

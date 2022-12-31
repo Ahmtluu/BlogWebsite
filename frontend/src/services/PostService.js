@@ -1,10 +1,18 @@
 import axios from "axios";
 import { cookies } from "./UserService";
 
+const config ={
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+}
+
+
 //Get all POST
 const GetAllPosts = async () => {
   return await axios
-    .get("/post")
+    .get("posts", config.headers)
     .then((response) => {
       return response.data;
     })
@@ -16,7 +24,7 @@ const GetAllPosts = async () => {
 //Get Single POST
 const GetPost =  (id) => {
   return axios
-    .get(`/post/${id}`)
+    .get(`/posts/${id}`)
     .then((response) => {
       return response.data;
     })
@@ -31,7 +39,7 @@ const PostCreate = (formData, currentUser) => {
     headers: { Authorization: `Bearer ${authKey}` },
   };
   return axios.post(
-    "/post",
+    "/posts",
     {
       title: formData.title,
       cover: formData.cover,
@@ -52,7 +60,7 @@ const PostUpdate = (formData, currentUser, postId) => {
   const config = {
     headers: { Authorization: `Bearer ${authKey}` },
   };
-console.log(formData)
+console.log(formData,config,currentUser, postId )
 };
 //Post delete
 const PostDelete = async (id) => {

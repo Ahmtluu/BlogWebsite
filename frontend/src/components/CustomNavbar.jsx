@@ -1,7 +1,6 @@
 import Container from "react-bootstrap/Container";
 import { Navbar, Dropdown, Nav, NavDropdown } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
-import { UserLogout } from "../services/UserService";
 import { useNavigate } from "react-router-dom";
 import { cookies } from "../services/UserService";
 import jwt_decode from "jwt-decode";
@@ -28,7 +27,7 @@ function CustomNavbar() {
       setCurrentScrollHeight(newScrollHeight);
     };
     getCurrentId();
-  }, []);
+  });
 
   const opacity = Math.min(currentScrollHeight / 50, 1);
   const duration = 300;

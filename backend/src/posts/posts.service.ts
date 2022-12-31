@@ -36,10 +36,16 @@ export class PostsService {
 
   findOne(id: string) {
     return this.postModel
-      .findById({ _id: id })
-      .exec();
+      .findOne({ _id: id })
+      .exec()
+      .then(async (post) => {
+        if (post) {
+          return post;
+        } else {
+          return "User doesn't exist!";
+        }
+      });
   }
-
   async update(id: string, post: UpdatePostDto) {
     return await this.postModel
       .findOne({ _id: id })

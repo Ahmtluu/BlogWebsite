@@ -13,7 +13,7 @@ export default function AuthorDetail() {
   };
   useEffect(() => {
     fetchAuthorData();
-  }, []);
+  });
 
   return author ? (
     <>
@@ -28,7 +28,7 @@ export default function AuthorDetail() {
         >
           <img
             src={profileImage}
-            alt="Generic placeholder image"
+            alt="Generic placeholder"
             className="img-fluid img-thumbnail mt-4 mb-2"
             style={{ width: "150px", zIndex: "1" }}
           />

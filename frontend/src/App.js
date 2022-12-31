@@ -20,13 +20,13 @@ function App() {
       {location.pathname !== "/login" ? <CustomNavbar /> : <></>}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/posts/:_id" element={<PostDetail />} />
-        <Route path="/categories/:title" element={<CategorisedPost />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/aboutme" element={<AboutMe />} />
-        <Route path="/author/:username" element={<Author />} />
+        <Route path="posts/:_id" element={<PostDetail />} />
+        <Route path="categories/:title" element={<CategorisedPost />} />
+        <Route path="login" element={<Login />} />
+        <Route path="aboutme" element={<AboutMe />} />
+        <Route path="author/:username" element={<Author />} />
         <Route element={<ProtectedRoutes isLoggedIn={isLoggedIn} />}>
-          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="profile/:id" element={<Profile />} />
         </Route>
       </Routes>
     </>
