@@ -11,19 +11,24 @@ const config ={
 
 //Get all POST
 const GetAllPosts = async () => {
-  return await axios
-    .get("posts", config.headers)
+  try {
+    return await axios
+    .get("/posts")
     .then((response) => {
       return response.data;
     })
     .catch((error) => {
       console.error(error);
     });
+  } catch (error) {
+    console.log(error)
+  }
+ 
 };
 
 //Get Single POST
-const GetPost =  (id) => {
-  return axios
+const GetPost = async (id) => {
+  return await axios
     .get(`/posts/${id}`)
     .then((response) => {
       return response.data;

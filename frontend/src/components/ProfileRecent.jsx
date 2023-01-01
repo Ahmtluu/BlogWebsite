@@ -1,61 +1,24 @@
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Row,
-  Col,
-  Card,
-  Container,
-} from "react-bootstrap";
-
-import { PostCreate } from "../services/PostService";
-
-import { GetAllPosts, PostDelete,PostUpdate } from "../services/PostService";
+import React, { useState, useEffect,lazy } from "react";
+import { Button, Row, Col, Card, Container } from "react-bootstrap";
+import { GetAllPosts, PostDelete } from "../services/PostService";
 import { FaSync } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
-import CustomModal from "./CustomModal";
+import { useNavigate } from "react-router";
 
 export default function ProfileRecent({ currentUser, getProfileData }) {
-  const [addNewShow, setAddNewShow] = useState(false);
-  const [updateShow, setUpdateShow] = useState(false);
+
   const [userPosts, setUserPosts] = useState();
-  const [selectedPost, setPost]=useState({})
+  const [selectedPost, setPost] = useState({});
+
+  let navigate= useNavigate()
+  const getReleativePost = async () => {
+    const response = await GetAllPosts();
+    setUserPosts(response);
+  };
 
   useEffect(() => {
     getReleativePost();
   }, []);
-
-  const onAddPostHandle = () => {
-    setAddNewShow(!addNewShow);
-  };
-  const onUpdatePostHandle = () => {
-    
-    setUpdateShow(!updateShow);
-
-  };
-
-  const getReleativePost = async () => {
-    await GetAllPosts().then((response) => {
-      setUserPosts(response);
-    });
-  };
-
-  const onPostDelete = async (id) => {
-    await PostDelete(id).then(() => {
-      getReleativePost();
-    });
-  };
-
-  const onPostUpdateSubmit= async (formData, postId) => {
-    PostUpdate(formData, currentUser, postId);
-    getReleativePost();
-   
-  };
-
-  const onPostSubmit= async (formData) => {
-    PostCreate(formData, currentUser);
-    getReleativePost();
-    setAddNewShow(!addNewShow);
-  };
 
   return (
     <>
@@ -66,18 +29,12 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
           <button
             type="button"
             className="btn btn-outline-dark"
-            data-mdb-ripple-color="dark"
-            onClick={onAddPostHandle}
+            onClick={(e)=>{
+             navigate("/posts/add_new")
+            }}
           >
             Add new
           </button>
-          <CustomModal
-            item=""
-            mShow={addNewShow}
-            hide={onAddPostHandle}
-            name="Add New"
-            onSubmitHandle={onPostSubmit}
-          />
         </div>
       </div>
       <Row>
@@ -95,8 +52,11 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
                         variant="dark"
                         className="d-flex align-items-center justify-content-around w-25 no-border"
                         onClick={(e) => {
-                          setPost(post)
-                          onUpdatePostHandle()
+                          navigate(`/posts/${post._id}/update`,{
+                            state:{
+                              post:post
+                            }
+                          })
                         }}
                       >
                         <FaSync />
@@ -106,7 +66,7 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
                         variant="danger"
                         className="d-flex align-items-center justify-content-around w-25"
                         onClick={(e) => {
-                          onPostDelete(post._id);
+                         
                         }}
                       >
                         <FaTrash />
@@ -115,13 +75,6 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
                     </Container>
                   </Card.Body>
                 </Card>
-                <CustomModal
-            item={selectedPost}
-            mShow={updateShow}
-            hide={onUpdatePostHandle}
-            name={selectedPost.title}
-            onSubmitHandle={onPostUpdateSubmit}
-          />
               </Col>
             );
           })}

@@ -11,6 +11,8 @@ import Author from "./pages/Author";
 import { cookies } from "./services/UserService";
 
 import { useLocation } from "react-router-dom";
+import PostUpdate from "./pages/PostUpdate";
+import PostAdd from "./pages/PostAdd";
 
 function App() {
   let location = useLocation();
@@ -26,6 +28,8 @@ function App() {
         <Route path="aboutme" element={<AboutMe />} />
         <Route path="author/:username" element={<Author />} />
         <Route element={<ProtectedRoutes isLoggedIn={isLoggedIn} />}>
+          <Route path="posts/:_id/update" element={<PostUpdate/>}/>
+          <Route path="posts/add_new" element={<PostAdd/>}/>
           <Route path="profile/:id" element={<Profile />} />
         </Route>
       </Routes>
