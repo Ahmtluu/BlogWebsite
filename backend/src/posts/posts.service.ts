@@ -5,6 +5,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { Model } from 'mongoose';
 import { PostDocument, Post } from '../schemas/post.shema';
 
+
 @Injectable()
 export class PostsService {
   constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}

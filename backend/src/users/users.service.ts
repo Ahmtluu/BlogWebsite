@@ -58,6 +58,7 @@ export class UsersService {
               access_token: this.jwtService.sign({
                 sub: user.id,
                 username: user.username,
+                profileImage:user.profileImg
               }),
             };
           } else {

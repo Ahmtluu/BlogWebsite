@@ -51,9 +51,9 @@ const PostCreate = (formData, currentUser) => {
       content: formData.content,
       category: formData.category,
       createdBy: {
-        _id: currentUser.userId,
+        _id: currentUser.sub,
         username: currentUser.username,
-        profileImg: currentUser.profileImg,
+        profileImg: currentUser.profileImage,
       },
     },
     config

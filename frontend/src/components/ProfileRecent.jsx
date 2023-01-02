@@ -4,6 +4,8 @@ import { GetAllPosts, PostDelete } from "../services/PostService";
 import { FaSync } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+
 
 export default function ProfileRecent({ currentUser, getProfileData }) {
 
@@ -42,11 +44,17 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
           userPosts.map((post) => {
             return (
               <Col md={6} key={post._id}>
+                
                 <Card className="mb-2">
+                <Link to={`/posts/${post._id}`} className="link" relative="path">
                   <Card.Img variant="top" src="https://picsum.photos/536/354" />
                   <Card.Body>
                     <Card.Title>{post.title}</Card.Title>
-                    <Container className="d-flex justify-content-evenly">
+                    
+                  </Card.Body>
+                  </Link>
+                  <Card.Footer>
+                  <Container className="d-flex justify-content-evenly">
                       {" "}
                       <Button
                         variant="dark"
@@ -73,8 +81,10 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
                         Delete{" "}
                       </Button>
                     </Container>
-                  </Card.Body>
+                  </Card.Footer>
+      
                 </Card>
+  
               </Col>
             );
           })}

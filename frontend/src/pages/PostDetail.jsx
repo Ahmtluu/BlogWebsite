@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { GetPost } from "../services/PostService";
+import {Image} from "react-bootstrap"
 
 function PostDetail() {
   const [currentPost, setCurrentPost] = useState();
@@ -19,8 +20,13 @@ function PostDetail() {
   if (!currentPost) { return <div>Loading</div> }
     return (
       <Container>
+        <Image src={currentPost.cover}></Image>
         <h5>{currentPost.title}</h5>
-        <p>{currentPost.content}</p>
+        {
+          
+        }
+        <div dangerouslySetInnerHTML={{ __html: currentPost.content }}></div>
+        
       </Container>
     )
   

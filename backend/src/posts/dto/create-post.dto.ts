@@ -6,5 +6,5 @@ export class CreatePostDto {
   category: string;
   createdBy: User;
   createdDate: Date;
-  content: string;
+  content: any;
 }
