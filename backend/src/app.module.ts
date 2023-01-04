@@ -7,6 +7,7 @@ import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { MulterModule } from '@nestjs/platform-express';
 dotenv.config();
 
 @Module({
@@ -14,6 +15,9 @@ dotenv.config();
     ConfigModule.forRoot(),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '/public'),
+    }),
+    MulterModule.register({
+      dest: './upload',
     }),
     MongooseModule.forRoot(process.env.DATABASE_URL),
     PostsModule,

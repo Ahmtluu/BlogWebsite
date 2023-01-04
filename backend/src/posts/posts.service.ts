@@ -10,7 +10,7 @@ import { PostDocument, Post } from '../schemas/post.shema';
 export class PostsService {
   constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}
 
-  async create(pst: CreatePostDto) {
+  async create(pst: CreatePostDto, postCover:Express.Multer.File) {
     return await this.postModel
       .findOne({ title: pst.title })
       .exec()
@@ -19,7 +19,9 @@ export class PostsService {
           const newPost = new this.postModel(post);
           newPost.title = pst.title;
           newPost.content = pst.content;
-          newPost.cover = pst.cover;
+          if(postCover){
+            newPost.cover = postCover.buffer.toString();
+          }
           newPost.category = pst.category;
           newPost.createdBy = pst.createdBy;
           newPost.createdDate = new Date();
@@ -47,13 +49,15 @@ export class PostsService {
         }
       });
   }
-  async update(id: string, post: UpdatePostDto) {
+  async update(id: string, post: UpdatePostDto,postCover:Express.Multer.File) {
     return await this.postModel
       .findOne({ _id: id })
       .exec()
       .then((foundedPost) => {
         if (foundedPost) {
-          foundedPost.cover = post.cover;
+          if(postCover){
+            foundedPost.cover = postCover.buffer.toString();
+          }
           foundedPost.title = post.title;
           foundedPost.createdBy = post.createdBy;
           foundedPost.createdDate = post.createdDate;

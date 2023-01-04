@@ -20,7 +20,7 @@ function PostDetail() {
   if (!currentPost) { return <div>Loading</div> }
     return (
       <Container>
-        <Image src={currentPost.cover}></Image>
+       
         <h5>{currentPost.title}</h5>
         {
           

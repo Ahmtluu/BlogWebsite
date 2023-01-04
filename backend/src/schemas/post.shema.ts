@@ -7,7 +7,7 @@ export type PostDocument = HydratedDocument<Post>;
 @Schema()
 export class Post {
   @Prop()
-  cover: string;
+  cover: string
   @Prop()
   title: string;
   @Prop()

@@ -33,12 +33,11 @@ export default function PostAdd() {
     setValue("content",postContent);
   };
 
-  const onSubmit = (formData) => {
+  const onSubmit = async (formData) => {
     var token = cookies.get("jwt_authorization");
     var currentUser= jwt_decode(token);
-    PostCreate(formData, currentUser);
-    usernavigate(`/profile/${currentUser.sub}`)
-
+   console.log(formData)
+  
   };
 
 
@@ -53,7 +52,7 @@ export default function PostAdd() {
                 type="file"
                 id="cover"
                 className="form-control"
-                onChange={event=>setValue("cover", event.target.value)}
+                onChange={event=>console.log(event.target.value)}
               />
               {errors.name && errors.name.type === "required" && (
                 <span>This is required</span>

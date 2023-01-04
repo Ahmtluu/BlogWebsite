@@ -73,7 +73,7 @@ const PostDelete = async (id) => {
   const config = {
     headers: { Authorization: `Bearer ${authKey}` },
   };
-  return await axios.delete(`/post/${id}`, config);
+  return await axios.delete(`/posts/${id}`, config);
 };
 
 export { GetAllPosts, GetPost, PostCreate, PostUpdate, PostDelete };

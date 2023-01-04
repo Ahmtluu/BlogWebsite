@@ -16,7 +16,7 @@ export default function CustomSinglePost({
 
   return (
     <>
-      <Col md={10} className="mb-4 border-bottom">
+      <Col md={6} className="mb-4">
         <Link to={`/posts/${postId}`} className="link" relative="path">
           <div className="imageContainer">
             <Image className="cardImage img-fluid" alt="cover" src={cover} />
@@ -29,8 +29,8 @@ export default function CustomSinglePost({
           </h6>
         </Link>
         <Link to={`/posts/${postId}`} className="link" relative="path">
-          <h2>{title}</h2>
-          <p className="text">{content}</p>
+          <h2 dangerouslySetInnerHTML={{ __html: title }}></h2>
+          <p className="text" dangerouslySetInnerHTML={{ __html: content }}></p>
         </Link>
         <Link
           to={`/author/${createdBy.username}`}

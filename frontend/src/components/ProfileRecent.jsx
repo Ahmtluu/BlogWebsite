@@ -18,6 +18,13 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
     setUserPosts(response);
   };
 
+  const deleteSelectedPost=async (id)=>{
+    await PostDelete(id).then(()=>{
+      getReleativePost();
+    })
+   
+  }
+
   useEffect(() => {
     getReleativePost();
   }, []);
@@ -40,14 +47,19 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
         </div>
       </div>
       <Row>
-        {userPosts &&
+        {userPosts && userPosts.length>0 ?
           userPosts.map((post) => {
             return (
-              <Col md={6} key={post._id}>
-                
-                <Card className="mb-2">
+              <Col md={4} key={post._id}>
+                <Card className="mb-2" style={{
+                  width:"100%"
+                }}>
                 <Link to={`/posts/${post._id}`} className="link" relative="path">
-                  <Card.Img variant="top" src="https://picsum.photos/536/354" />
+                  <Card.Img style={{
+                    width:"100%",
+                    height:"225px",
+                    overflow:"hidden"
+                  }} variant="top" src="https://picsum.photos/536/354" />
                   <Card.Body>
                     <Card.Title>{post.title}</Card.Title>
                     
@@ -74,7 +86,7 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
                         variant="danger"
                         className="d-flex align-items-center justify-content-around w-25"
                         onClick={(e) => {
-                         
+                         deleteSelectedPost(post._id)
                         }}
                       >
                         <FaTrash />
@@ -87,7 +99,7 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
   
               </Col>
             );
-          })}
+          }):<Container>Henüz bir paylaşım yapmadın!</Container>}
       </Row>
     </>
   );

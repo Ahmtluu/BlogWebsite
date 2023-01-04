@@ -7,21 +7,26 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  create(@Body() createPostDto: CreatePostDto, @UploadedFile() file: Express.Multer.File) {
+    return this.postsService.create(createPostDto, file);
   }
 
   @Get()
@@ -35,9 +40,12 @@ export class PostsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('image',{storage: diskStorage({
+    destination: './files'
+  }),}))
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(id, updatePostDto);
+  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto,@UploadedFile() file: Express.Multer.File) {
+    return this.postsService.update(id, updatePostDto,file);
   }
 
   @UseGuards(JwtAuthGuard)
