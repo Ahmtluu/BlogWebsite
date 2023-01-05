@@ -15,6 +15,8 @@ function CustomPosts() {
     fetchData();
   }, []);
 
+  console.log(posts)
+
 
   return (
     <>
@@ -29,7 +31,8 @@ function CustomPosts() {
                     title={post.title}
                     content={post.content}
                     category={post.category}
-                    createdBy={post.createdBy}
+                    creatorName={post.creatorName}
+                    creatorProfileImage={post.creatorProfileImage}
                     cover={post.cover}
                     createdAt={post.createdDate}
                   />

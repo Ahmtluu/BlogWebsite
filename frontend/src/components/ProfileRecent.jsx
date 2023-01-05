@@ -27,6 +27,8 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
 
   useEffect(() => {
     getReleativePost();
+    if(userPosts) console.log(`http://localhost:3001/postImages/${userPosts[0].cover}`) 
+
   }, []);
 
   return (
@@ -59,7 +61,8 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
                     width:"100%",
                     height:"225px",
                     overflow:"hidden"
-                  }} variant="top" src="https://picsum.photos/536/354" />
+                  }} variant="top" src={`http://localhost:3001/postImages/${post.cover}`}/>
+
                   <Card.Body>
                     <Card.Title>{post.title}</Card.Title>
                     

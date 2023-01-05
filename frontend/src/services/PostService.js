@@ -38,24 +38,23 @@ const GetPost = async (id) => {
     });
 };
 //Post create
-const PostCreate = (formData, currentUser) => {
+const PostCreate = (data, currentUser) => {
   const authKey = cookies.get("jwt_authorization");
   const config = {
     headers: { Authorization: `Bearer ${authKey}` },
   };
+  const formData = new FormData();
+
+  formData.append("title", data.title);
+  formData.append("content", data.content)
+  formData.append("cover", data.cover[0]);
+  formData.append("category", data.category);
+  formData.append("creatorName", currentUser.username);
+  formData.append("creatorProfileImage", currentUser.profileImage);
+  
   return axios.post(
     "/posts",
-    {
-      title: formData.title,
-      cover: formData.cover,
-      content: formData.content,
-      category: formData.category,
-      createdBy: {
-        _id: currentUser.sub,
-        username: currentUser.username,
-        profileImg: currentUser.profileImage,
-      },
-    },
+    formData,
     config
   );
 };

@@ -14,10 +14,12 @@ dotenv.config();
   imports: [
     ConfigModule.forRoot(),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '/public'),
+      rootPath: join(__dirname, '..', '/uploads'),
     }),
-    MulterModule.register({
-      dest: './upload',
+    MulterModule.registerAsync({
+      useFactory: () => ({
+        dest: join(__dirname, '..', '/public'),
+      }),
     }),
     MongooseModule.forRoot(process.env.DATABASE_URL),
     PostsModule,

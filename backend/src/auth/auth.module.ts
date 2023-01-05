@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
         PassportModule,
         JwtModule.register({
             secret: process.env.SECRET_KEY,
-            signOptions: { expiresIn: '7d' },
+            signOptions: { expiresIn: '2days' },
           }),
 ],
     providers: [JWTStrategy],

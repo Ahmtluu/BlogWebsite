@@ -15,7 +15,9 @@ export class Post {
   @Prop()
   content: string;
   @Prop()
-  createdBy: User;
+  creatorName:string;
+  @Prop()
+  creatorProfileImage:string
   @Prop()
   createdDate: Date;
 }

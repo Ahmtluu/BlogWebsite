@@ -20,10 +20,11 @@ export class PostsService {
           newPost.title = pst.title;
           newPost.content = pst.content;
           if(postCover){
-            newPost.cover = postCover.buffer.toString();
+            newPost.cover = postCover.filename;
           }
           newPost.category = pst.category;
-          newPost.createdBy = pst.createdBy;
+          newPost.creatorName=pst.creatorName
+          newPost.creatorProfileImage=pst.creatorProfileImage;
           newPost.createdDate = new Date();
           newPost.save();
           return newPost;
@@ -59,7 +60,8 @@ export class PostsService {
             foundedPost.cover = postCover.buffer.toString();
           }
           foundedPost.title = post.title;
-          foundedPost.createdBy = post.createdBy;
+          foundedPost.creatorName=post.creatorName
+          foundedPost.creatorProfileImage=post.creatorProfileImage;
           foundedPost.createdDate = post.createdDate;
           foundedPost.content = post.content;
           foundedPost.save();

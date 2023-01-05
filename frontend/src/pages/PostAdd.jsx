@@ -29,17 +29,17 @@ export default function PostAdd() {
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
     const postContent = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-
     setValue("content",postContent);
   };
 
-  const onSubmit = async (formData) => {
+  const onSubmit = async (data) => {
     var token = cookies.get("jwt_authorization");
     var currentUser= jwt_decode(token);
-   console.log(formData)
-  
-  };
+    await PostCreate(data,currentUser).then(()=>{
+      usernavigate(`/profile/${currentUser.username}`)
+    })
 
+  };
 
   return (
     <Container>
@@ -52,7 +52,7 @@ export default function PostAdd() {
                 type="file"
                 id="cover"
                 className="form-control"
-                onChange={event=>console.log(event.target.value)}
+                {...register("cover")}
               />
               {errors.name && errors.name.type === "required" && (
                 <span>This is required</span>
