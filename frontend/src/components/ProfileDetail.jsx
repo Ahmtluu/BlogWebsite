@@ -15,13 +15,11 @@ import draftToHtml from "draftjs-to-html";
 import { UpdateUser } from "../services/UserService";
 
 export default function ProfileDetail({ currentUser, getProfileData }) {
-  const _contentState = ContentState.createFromText("Sample content state");
-  const raw = convertToRaw(_contentState); // RawDraftContentState JSON
-  const [contentState, setContentState] = useState(raw);
-
   const { register, handleSubmit, setValue } = useForm();
   const [modalShow, setModelShow] = useState(false);
-  const [editorState, setEditorState] = useState(contentState);
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
 
   const onHandleChange = () => {
     setModelShow(!modalShow);
@@ -35,67 +33,45 @@ export default function ProfileDetail({ currentUser, getProfileData }) {
 
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
-    const about = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-    setValue("about", about);
+    const userAbout = draftToHtml(
+      convertToRaw(editorState.getCurrentContent())
+    );
+    setValue("about", userAbout);
   };
 
   return (
     <Container>
       {currentUser && (
         <>
-          <Row>
-            <Col md={4}>
-              {" "}
-              <Image
-                src={`http://localhost:3001/profileImages/${currentUser.profileImg}`}
-                alt="Profile"
-                className="image"
-                style={{ width: "100%", height: "100%" }}
-              />
-            </Col>
-            <Col md={8}>
-              <div className="p-4" style={{ backgroundColor: "#f8f9fa" }}>
+          <Col xs={8}>
+            <Row>
+              <Col xs={4}>
+                <Image
+                  src={`http://localhost:3001/profileImages/${currentUser.profileImg}`}
+                  alt="Profile"
+                  fluid={true}
+                  className=" rounded"
+                />
+              </Col>
+              <Col xs={8}>
+                <h3 className="m-0">{currentUser.username}</h3>
+                <p>Jr. Full Stack (MERN) & React Native Dev</p>
+                <h6 className="text-muted">About</h6>
                 <p
                   className="font-italic mb-1"
                   dangerouslySetInnerHTML={{ __html: currentUser.about }}
                 />
-              </div>
-            </Col>
-          </Row>
-          <div
-            className="rounded-top text-white d-flex flex-row"
-            style={{ backgroundColor: "#000", height: "200px" }}
+              </Col>
+            </Row>
+          </Col>
+
+          <Button
+            type="button"
+            className="btn btn-dark mt-2"
+            onClick={onHandleChange}
           >
-            <div
-              className="ms-4 mt-5 d-flex flex-column"
-              style={{ width: "150px" }}
-            >
-              <Button
-                type="button"
-                className="btn btn-dark mt-2"
-                onClick={onHandleChange}
-              >
-                Edit profile
-              </Button>
-            </div>
-            <div className="ms-3" style={{ marginTop: "150px" }}>
-              <h5>{currentUser.username}</h5>
-            </div>
-          </div>
-          <div
-            className="p-4 text-black"
-            style={{ backgroundColor: "#f8f9fa" }}
-          >
-            <div className="d-flex justify-content-end text-center py-1">
-              <div>
-                <p className="mb-1 h5">253</p>
-                <p className="small text-muted mb-0">Total Posts</p>
-              </div>
-            </div>
-          </div>
-          <div className="mb-5 mt-4">
-            <p className="lead fw-normal mb-2">About</p>
-          </div>
+            Edit profile
+          </Button>
         </>
       )}
       <Modal show={modalShow} size={"xl"} onHide={onHandleChange}>

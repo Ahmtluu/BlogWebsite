@@ -6,7 +6,7 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Categories from "../components/Categories";
 import { useForm } from "react-hook-form";
-import { convertFromRaw, convertToRaw } from "draft-js";
+import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { PostCreate } from "../services/PostService";
 import { cookies } from "../services/UserService";
@@ -20,7 +20,7 @@ export default function PostAdd() {
     setValue,
     formState: { errors },
   } = useForm();
-  let usernavigate= useNavigate()
+  let usernavigate = useNavigate();
 
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -28,17 +28,18 @@ export default function PostAdd() {
 
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
-    const postContent = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-    setValue("content",postContent);
+    const postContent = draftToHtml(
+      convertToRaw(editorState.getCurrentContent())
+    );
+    setValue("content", postContent);
   };
 
   const onSubmit = async (data) => {
     var token = cookies.get("jwt_authorization");
-    var currentUser= jwt_decode(token);
-    await PostCreate(data,currentUser).then(()=>{
-      usernavigate(`/profile/${currentUser.username}`)
-    })
-
+    var currentUser = jwt_decode(token);
+    await PostCreate(data, currentUser).then(() => {
+      usernavigate(`/profile/${currentUser.sub}`);
+    });
   };
 
   return (

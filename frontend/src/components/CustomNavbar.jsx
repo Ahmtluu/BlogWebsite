@@ -1,7 +1,7 @@
 import Container from "react-bootstrap/Container";
-import { Navbar, Dropdown, Nav, NavDropdown, Image } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
+import { Navbar, Dropdown, Nav, NavDropdown } from "react-bootstrap";
 import { cookies } from "../services/UserService";
 import jwt_decode from "jwt-decode";
 import { GetCurrentUser } from "../services/UserService";
@@ -48,11 +48,11 @@ function CustomNavbar() {
       <Container>
         <Navbar.Brand href="/">Met'utia</Navbar.Brand>
 
-        {currentUser ? (
-          <>
+
             <Navbar.Toggle aria-controls="basic-navbar-nav " />
             <Navbar.Collapse className="justify-content-end">
               <Nav className="m-0">
+              {currentUser ?
                 <NavDropdown title={currentUser.username}>
                   {pathname.includes("/profile") ? (
                     <div></div>
@@ -76,12 +76,13 @@ function CustomNavbar() {
                     Çıkış
                   </Dropdown.Item>
                 </NavDropdown>
+                 : <Navbar.Text>
+                  <Link to="/login" className="text-decoration-none">Login</Link>
+                
+               </Navbar.Text>
+        }
               </Nav>
             </Navbar.Collapse>
-          </>
-        ) : (
-          <></>
-        )}
       </Container>
     </Navbar>
   );

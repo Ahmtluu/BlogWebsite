@@ -1,6 +1,6 @@
 import React from "react";
 import { Row, Col, Container, Image } from "react-bootstrap";
-import jumbotronImage from "../assets/images/jumbotronImage.png"
+import jumbotronImage from "../assets/images/jumbotronImage.png";
 
 export default function CustomCarrousel() {
   const styles = {
@@ -17,26 +17,24 @@ export default function CustomCarrousel() {
   };
 
   return (
-    <Container style={{minHeight:"640px"}}>
+    <Container>
       <Row>
-        <Col lg={6} className="mt-4 align-self-center">
-          <h1 className="display-3 fst-italic mt-4 bold">
-          Cours Après Tes Rêves...
+        <Col md={7} className="align-self-center m-0 p-1">
+          <h1 className="display-3 fst-italic mt-4 bold ">
+            Cours Après Tes Rêves...
           </h1>
           <p className="lead my-3">
             Multiple lines of text that form the lede, informing new readers
             quickly and efficiently about what’s most interesting in this post’s
             contents.
           </p>
-          
         </Col>
-        <Col lg={6}>
+        <Col md={5}>
           <Container fluid style={styles.imageContainer}>
             <Image style={styles.image} src={jumbotronImage} />
           </Container>
         </Col>
       </Row>
-
     </Container>
   );
 }

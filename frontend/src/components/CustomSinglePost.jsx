@@ -16,7 +16,7 @@ export default function CustomSinglePost({
   createdAt = createdAt.substring(0, 10);
   return (
     <>
-      <Col md={6} className="mb-4">
+      <Col md={6} className="mb-4 animate__animated animate__fadeInUp">
         <Link to={`/posts/${postId}`} className="link" relative="path">
           <div className="imageContainer">
             <Image

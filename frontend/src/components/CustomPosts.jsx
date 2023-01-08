@@ -12,27 +12,30 @@ function CustomPosts() {
       const response = await GetAllPosts();
       setPosts(response);
     };
+
     fetchData();
   }, []);
 
   return (
     <>
       {posts ? (
-        <Container>
+        <Container className="m-2">
           <Row className="d-flex justify-content-between align-items-md-stretch py-2">
             {posts.map((post) => {
               return (
-                <CustomSinglePost
-                  key={post._id}
-                  postId={post._id}
-                  title={post.title}
-                  content={post.content}
-                  category={post.category}
-                  creatorName={post.creatorName}
-                  creatorProfileImage={post.creatorProfileImage}
-                  cover={post.cover}
-                  createdAt={post.createdDate}
-                />
+                <>
+                  <CustomSinglePost
+                    key={post._id}
+                    postId={post._id}
+                    title={post.title}
+                    content={post.content}
+                    category={post.category}
+                    creatorName={post.creatorName}
+                    creatorProfileImage={post.creatorProfileImage}
+                    cover={post.cover}
+                    createdAt={post.createdDate}
+                  />
+                </>
               );
             })}
           </Row>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { cookies } from "./UserService";
+import { cookies, GetCurrentUser } from "./UserService";
 
 const config ={
   headers: {
@@ -35,11 +35,14 @@ const GetPost = async (id) => {
     });
 };
 //Post create
-const PostCreate = (data, currentUser) => {
+const PostCreate = async (data, user) => {
   const authKey = cookies.get("jwt_authorization");
   const config = {
     headers: { Authorization: `Bearer ${authKey}` },
   };
+
+  const currentUser = await GetCurrentUser(user.sub)
+
   const formData = new FormData();
 
   formData.append("title", data.title);
@@ -47,7 +50,7 @@ const PostCreate = (data, currentUser) => {
   formData.append("cover", data.cover[0]);
   formData.append("category", data.category);
   formData.append("creatorName", currentUser.username);
-  formData.append("creatorProfileImage", currentUser.profileImage);
+  formData.append("creatorProfileImage", currentUser.profileImg);
   
   return axios.post(
     "/posts",

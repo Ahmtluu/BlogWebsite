@@ -11,6 +11,7 @@ import { cookies } from "./services/UserService";
 import { useLocation } from "react-router-dom";
 import PostUpdate from "./pages/PostUpdate";
 import PostAdd from "./pages/PostAdd";
+import "animate.css";
 
 function App() {
   let location = useLocation();

@@ -107,7 +107,7 @@ export class UsersService {
           user.fullName = usr.fullName;
           user.email = usr.email;
           user.about = usr.about;
-          user.profileImg = profileImage.filename;
+          if(profileImage) user.profileImg = profileImage.filename;
 
           if (usr.password) {
             const match = this.checkPassword(usr.password, user.password);
