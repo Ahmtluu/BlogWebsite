@@ -1,22 +1,31 @@
-import React, { useState} from "react";
-import { Modal, Button, Form, Row, Col, Container } from "react-bootstrap";
+import React, { useState } from "react";
+import {
+  Modal,
+  Button,
+  Form,
+  Row,
+  Col,
+  Container,
+  Image,
+} from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { EditorState, ContentState, convertToRaw } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import draftToHtml from "draftjs-to-html";
 import { UpdateUser } from "../services/UserService";
-import 'react-18-image-lightbox/style.css';
-import "./ProfileDetail.css";
 
 export default function ProfileDetail({ currentUser, getProfileData }) {
-  const { register, handleSubmit } = useForm();
+  const _contentState = ContentState.createFromText("Sample content state");
+  const raw = convertToRaw(_contentState); // RawDraftContentState JSON
+  const [contentState, setContentState] = useState(raw);
+
+  const { register, handleSubmit, setValue } = useForm();
   const [modalShow, setModelShow] = useState(false);
-  const [imageModalShow, setImageShow] = useState(false);
+  const [editorState, setEditorState] = useState(contentState);
 
   const onHandleChange = () => {
     setModelShow(!modalShow);
   };
-  const onImageHandleChange=()=>{
-    setImageShow(!imageModalShow)
-
-  }
 
   const onSubmitHandle = async (data) => {
     UpdateUser(currentUser.userId, data);
@@ -24,11 +33,35 @@ export default function ProfileDetail({ currentUser, getProfileData }) {
     setModelShow(!modalShow);
   };
 
+  const onEditorStateChange = (editorState) => {
+    setEditorState(editorState);
+    const about = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+    setValue("about", about);
+  };
 
   return (
     <Container>
       {currentUser && (
         <>
+          <Row>
+            <Col md={4}>
+              {" "}
+              <Image
+                src={`http://localhost:3001/profileImages/${currentUser.profileImg}`}
+                alt="Profile"
+                className="image"
+                style={{ width: "100%", height: "100%" }}
+              />
+            </Col>
+            <Col md={8}>
+              <div className="p-4" style={{ backgroundColor: "#f8f9fa" }}>
+                <p
+                  className="font-italic mb-1"
+                  dangerouslySetInnerHTML={{ __html: currentUser.about }}
+                />
+              </div>
+            </Col>
+          </Row>
           <div
             className="rounded-top text-white d-flex flex-row"
             style={{ backgroundColor: "#000", height: "200px" }}
@@ -37,23 +70,10 @@ export default function ProfileDetail({ currentUser, getProfileData }) {
               className="ms-4 mt-5 d-flex flex-column"
               style={{ width: "150px" }}
             >
-     
-                <Button className=" mt-4 mb-2 p-0 bg-dark shadow-none btn-link rounded" onClick={onImageHandleChange}>
-                  {" "}
-                  <img
-                    src={`http://localhost:3001/images/${currentUser.profileImg}`}
-                    alt="Profile"
-                    className="image"
-                    style={{ width: "100%", height: "100%", }}
-                  />
-                </Button>
-     
-
               <Button
                 type="button"
-                className="btn btn-dark"
+                className="btn btn-dark mt-2"
                 onClick={onHandleChange}
-                
               >
                 Edit profile
               </Button>
@@ -73,63 +93,88 @@ export default function ProfileDetail({ currentUser, getProfileData }) {
               </div>
             </div>
           </div>
+          <div className="mb-5 mt-4">
+            <p className="lead fw-normal mb-2">About</p>
+          </div>
         </>
       )}
-
       <Modal show={modalShow} size={"xl"} onHide={onHandleChange}>
         <Modal.Header>
           <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Row className="w-50">
-              <Col>
-                <Form.Group className="mb-3">
-                  <Form.Label>Username</Form.Label>
-                  <input
-                    type="text"
-                    id="formUsername"
-                    defaultValue={currentUser.username}
-                    className="form-control"
-                    {...register("username")}
-                  />
-                </Form.Group>
-              </Col>
+            <Row className="d-flex flex-row">
+              <Form.Group className="mb-3">
+                <Form.Label>Profile Image</Form.Label>
+                <input
+                  type="file"
+                  id="profileImg"
+                  className="form-control"
+                  {...register("profileImg")}
+                />
+              </Form.Group>
+              <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Full Name</Form.Label>
+                    <input
+                      type="text"
+                      id="formFullName"
+                      defaultValue={currentUser.fullName}
+                      className="form-control"
+                      {...register("fullName")}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Username</Form.Label>
+                    <input
+                      type="text"
+                      id="formUsername"
+                      defaultValue={currentUser.username}
+                      className="form-control"
+                      {...register("username")}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col md={6}>
+                  {" "}
+                  <Form.Group className="mb-3">
+                    <Form.Label>Email</Form.Label>
+                    <input
+                      type="email"
+                      id="formEmail"
+                      defaultValue={currentUser.email}
+                      className="form-control"
+                      {...register("email")}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Password</Form.Label>
+                    <input
+                      type="password"
+                      id="formPassword"
+                      className="form-control"
+                      {...register("password")}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
             </Row>
-            <Row>
-              <Col>
-                <Form.Group className="mb-3">
-                  <Form.Label>Email</Form.Label>
-                  <input
-                    type="email"
-                    id="formEmail"
-                    defaultValue={currentUser.email}
-                    className="form-control"
-                    {...register("email")}
-                  />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group className="mb-3">
-                  <Form.Label>Password</Form.Label>
-                  <input
-                    type="password"
-                    id="formPassword"
-                    className="form-control"
-                    {...register("password")}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-
             <Form.Group className="mb-3">
               <Form.Label>About</Form.Label>
-              <textarea
-                defaultValue={currentUser.about}
-                className="form-control"
-                id="formAboutArea"
-                {...register("about")}
-                rows="3"
+              <Editor
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+                wrapperClassName="wrapper-class"
+                editorClassName="editor-class"
+                toolbarClassName="toolbar-class"
               />
             </Form.Group>
           </Form>
@@ -147,6 +192,6 @@ export default function ProfileDetail({ currentUser, getProfileData }) {
           </Button>
         </Modal.Footer>
       </Modal>
-      </Container>
+    </Container>
   );
 }

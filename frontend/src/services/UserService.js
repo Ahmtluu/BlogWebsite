@@ -20,14 +20,15 @@ const UpdateUser = async (id, dummyData) => {
     headers: { Authorization: `Bearer ${token}` },
   };
 
-  const bodyparameters = {
-    username: dummyData.username,
-    email: dummyData.email,
-    about: dummyData.about,
-    password: dummyData.password,
-  };
+  const formData = new FormData();
+  formData.append("username",dummyData.username );
+  formData.append("fullName",dummyData.fullName);
+  formData.append("email",dummyData.email);
+  formData.append("about",dummyData.about);
+  if(dummyData.profileImg) formData.append("profileImg", dummyData.profileImg[0]);
+  if(dummyData.password) formData.append("password",dummyData.password );
   return await axios
-    .patch(`/user/${id}`, bodyparameters, config)
+    .patch(`/user/${id}`, formData, config)
     .catch((err) => {
       console.log(err);
     });

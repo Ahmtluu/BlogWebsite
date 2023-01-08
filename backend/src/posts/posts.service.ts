@@ -57,7 +57,7 @@ export class PostsService {
       .then((foundedPost) => {
         if (foundedPost) {
           if(postCover){
-            foundedPost.cover = postCover.buffer.toString();
+            foundedPost.cover =  postCover.filename;;
           }
           foundedPost.title = post.title;
           foundedPost.creatorName=post.creatorName

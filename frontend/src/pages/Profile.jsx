@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import CustomFooter from "../components/CustomFooter";
-import ProfileAbout from "../components/ProfileAbout";
 import ProfileRecent from "../components/ProfileRecent";
 import ProfileDetail from "../components/ProfileDetail";
 import { GetCurrentUser } from "../services/UserService";
@@ -29,10 +28,6 @@ function Profile() {
               <ProfileDetail
                 currentUser={currentUser}
                 getProfileData={getProfileData}
-              />
-              <ProfileAbout
-                getProfileData={getProfileData}
-                about={currentUser.about}
               />
               <ProfileRecent
                 getProfileData={getProfileData}

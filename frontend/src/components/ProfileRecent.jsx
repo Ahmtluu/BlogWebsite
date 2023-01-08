@@ -27,9 +27,7 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
 
   useEffect(() => {
     getReleativePost();
-    if(userPosts) console.log(`http://localhost:3001/postImages/${userPosts[0].cover}`) 
-
-  }, []);
+     }, []);
 
   return (
     <>
@@ -52,7 +50,7 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
         {userPosts && userPosts.length>0 ?
           userPosts.map((post) => {
             return (
-              <Col md={4} key={post._id}>
+              <Col md={6} key={post._id}>
                 <Card className="mb-2" style={{
                   width:"100%"
                 }}>
@@ -73,7 +71,7 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
                       {" "}
                       <Button
                         variant="dark"
-                        className="d-flex align-items-center justify-content-around w-25 no-border"
+                        className="d-flex align-items-center"
                         onClick={(e) => {
                           navigate(`/posts/${post._id}/update`,{
                             state:{
@@ -82,18 +80,18 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
                           })
                         }}
                       >
-                        <FaSync />
+                        <FaSync className="m-1" />
                         Update
                       </Button>
                       <Button
                         variant="danger"
-                        className="d-flex align-items-center justify-content-around w-25"
+                        className="d-flex align-items-center"
                         onClick={(e) => {
                          deleteSelectedPost(post._id)
                         }}
                       >
-                        <FaTrash />
-                        Delete{" "}
+                        <FaTrash className="m-1"/>
+                         Delete{" "}
                       </Button>
                     </Container>
                   </Card.Footer>

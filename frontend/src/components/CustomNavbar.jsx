@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { cookies } from "../services/UserService";
 import jwt_decode from "jwt-decode";
+import { GetCurrentUser } from "../services/UserService";
 
 function CustomNavbar() {
   const pathname = window.location.pathname;
@@ -14,10 +15,12 @@ function CustomNavbar() {
   const [currentUser, setUser] = useState();
 
   const getCurrentId = async () => {
-    if (isLoggedIn === "true") {
+    if (isLoggedIn) {
       const token = cookies.get("jwt_authorization");
       const decoded = jwt_decode(token);
-      setUser(decoded);
+      await GetCurrentUser(decoded.sub).then((response) => {
+        setUser(response);
+      });
     }
   };
 
@@ -27,7 +30,7 @@ function CustomNavbar() {
       setCurrentScrollHeight(newScrollHeight);
     };
     getCurrentId();
-  },[]);
+  }, []);
 
   const opacity = Math.min(currentScrollHeight / 50, 1);
   const duration = 300;
@@ -35,7 +38,6 @@ function CustomNavbar() {
     backgroundColor: `rgba(73, 85, 121, ${opacity})`,
     transition: `${duration}ms ease-in-out`,
   };
-
   return (
     <Navbar
       style={navbar}
@@ -44,36 +46,19 @@ function CustomNavbar() {
       variant={currentScrollHeight < 20 ? "light" : "dark"}
     >
       <Container>
-        <Navbar.Brand href="/">AhmtMtlu</Navbar.Brand>
+        <Navbar.Brand href="/">Met'utia</Navbar.Brand>
 
         {currentUser ? (
           <>
             <Navbar.Toggle aria-controls="basic-navbar-nav " />
             <Navbar.Collapse className="justify-content-end">
               <Nav className="m-0">
-                <NavDropdown
-                  title={
-                    <div className="pull-left">
-                      <Image
-                        style={{
-                          borderRadius: "50%",
-                          height: "40px",
-                          width: "40px",
-                        }}
-                        src={`http://localhost:3001/images/${currentUser.profileImage}`}
-                        roundedCircle={true}
-                      ></Image>
-                    </div>
-                  }
-                  
-                >
-
+                <NavDropdown title={currentUser.username}>
                   {pathname.includes("/profile") ? (
                     <div></div>
                   ) : (
                     <>
-                   
-                      <Dropdown.Item href={`/profile/${currentUser.sub}`}>
+                      <Dropdown.Item href={`/profile/${currentUser.userId}`}>
                         Profil
                       </Dropdown.Item>
                       <Dropdown.Divider />
@@ -83,7 +68,7 @@ function CustomNavbar() {
                   <Dropdown.Item
                     onClick={() => {
                       cookies.remove("jwt_authorization", { path: "/" });
-                      cookies.set("isAuth", "false");
+                      cookies.set("isAuth", false);
                       setUser();
                       navigate("/");
                     }}
@@ -94,7 +79,9 @@ function CustomNavbar() {
               </Nav>
             </Navbar.Collapse>
           </>
-        ):<></>}
+        ) : (
+          <></>
+        )}
       </Container>
     </Navbar>
   );

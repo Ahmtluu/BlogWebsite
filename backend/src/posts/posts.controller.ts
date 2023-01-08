@@ -49,7 +49,7 @@ export class PostsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileInterceptor('image',{storage: diskStorage({
+  @UseInterceptors(FileInterceptor('cover',{storage: diskStorage({
     destination: './uploads/postImages'
   }),}))
   @Patch(':id')

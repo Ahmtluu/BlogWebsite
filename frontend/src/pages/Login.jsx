@@ -15,7 +15,7 @@ function Login() {
       await UserLogin(data).then((response) => {
         const jwt_token = response.data["access_token"];
         cookies.set("jwt_authorization", jwt_token);
-        cookies.set("isAuth", "true");
+        cookies.set("isAuth", true);
         navigate(`/`);
       });
     } catch (error) {
@@ -32,13 +32,14 @@ function Login() {
       }}
       className=" d-flex flex-column justify-content-center align-items-center "
     >
-      <Row className="w-25 h-50 ">
+      <Row className="">
         <Container
           style={{
             border: "solid",
             borderWidth: "5px",
             borderRadius: "15px",
             borderColor: `rgba(73, 85, 121, 0.2)`,
+            width: "300px",
           }}
         >
           <Container className="pt-4">
@@ -72,7 +73,7 @@ function Login() {
         </Container>
       </Row>
       {isDone === false ? (
-        <Row className="w-25 pt-2">
+        <Row className="m-1 pt-2">
           <div className="alert alert-danger" role="alert">
             Girmiş olduğun email veya parola hatalı. Lütfen kontrol et.
           </div>

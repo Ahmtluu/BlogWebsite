@@ -2,10 +2,6 @@ import { Navigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 
 const ProtectedRoutes = ({ isLoggedIn }) => {
-  return isLoggedIn === "false" ? (
-    <Navigate to="login" replace="true" />
-  ) : (
-    <Outlet />
-  );
+  return isLoggedIn ? <Outlet /> : <Navigate to="login" replace="true" />;
 };
 export default ProtectedRoutes;

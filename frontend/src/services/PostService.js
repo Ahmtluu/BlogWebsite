@@ -11,7 +11,7 @@ const config ={
 
 //Get all POST
 const GetAllPosts = async () => {
-  try {
+
     return await axios
     .get("/posts")
     .then((response) => {
@@ -20,9 +20,6 @@ const GetAllPosts = async () => {
     .catch((error) => {
       console.error(error);
     });
-  } catch (error) {
-    console.log(error)
-  }
  
 };
 

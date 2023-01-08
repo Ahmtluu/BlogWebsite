@@ -57,8 +57,6 @@ export class UsersService {
             return {
               access_token: this.jwtService.sign({
                 sub: user.id,
-                username: user.username,
-                profileImage:user.profileImg
               }),
             };
           } else {
@@ -98,7 +96,7 @@ export class UsersService {
       });
   }
 
-  update(id: string, usr: UpdateUserDto) {
+  update(id: string, usr: UpdateUserDto, profileImage: Express.Multer.File) {
     return this.userModel
       .findOne({ id: id })
       .exec()
@@ -109,6 +107,7 @@ export class UsersService {
           user.fullName = usr.fullName;
           user.email = usr.email;
           user.about = usr.about;
+          user.profileImg = profileImage.filename;
 
           if (usr.password) {
             const match = this.checkPassword(usr.password, user.password);
@@ -118,7 +117,6 @@ export class UsersService {
             }
           }
           user.save();
-
           return user;
         } else {
           return "User doesn't exist!";
