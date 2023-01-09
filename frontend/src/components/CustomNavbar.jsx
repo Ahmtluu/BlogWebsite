@@ -68,7 +68,7 @@ function CustomNavbar() {
                   <Dropdown.Item
                     onClick={() => {
                       cookies.remove("jwt_authorization", { path: "/" });
-                      cookies.set("isAuth", false);
+                      cookies.remove("isAuth", { path: "/" });
                       setUser();
                       navigate("/");
                     }}
