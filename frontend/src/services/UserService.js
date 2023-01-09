@@ -25,6 +25,7 @@ const UpdateUser = async (id, dummyData) => {
   formData.append("fullName",dummyData.fullName);
   formData.append("email",dummyData.email);
   formData.append("about",dummyData.about);
+  formData.append("description", dummyData.description)
   if(dummyData.profileImg) formData.append("profileImg", dummyData.profileImg[0]);
   if(dummyData.password) formData.append("password",dummyData.password );
   return await axios

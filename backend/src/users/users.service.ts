@@ -36,6 +36,7 @@ export class UsersService {
           newUser.about = usr.about;
           newUser.profileImg = usr.profileImg;
           newUser.fullName = usr.fullName;
+          newUser.description=usr.description;
           newUser.email = usr.email;
           newUser.password = password;
           newUser.createdAt = new Date();
@@ -86,6 +87,7 @@ export class UsersService {
             username: user.username,
             fullName: user.fullName,
             profileImg: user.profileImg,
+            description:user.description,
             email: user.email,
             about: user.about,
           };
@@ -96,7 +98,7 @@ export class UsersService {
       });
   }
 
-  update(id: string, usr: UpdateUserDto, profileImage: Express.Multer.File) {
+  update(id: string, usr: UpdateUserDto, profileImage: string) {
     return this.userModel
       .findOne({ id: id })
       .exec()
@@ -107,7 +109,8 @@ export class UsersService {
           user.fullName = usr.fullName;
           user.email = usr.email;
           user.about = usr.about;
-          if(profileImage) user.profileImg = profileImage.filename;
+          user.description=usr.description;
+          if(profileImage) user.profileImg = profileImage;
 
           if (usr.password) {
             const match = this.checkPassword(usr.password, user.password);

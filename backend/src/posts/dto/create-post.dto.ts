@@ -6,6 +6,7 @@ export class CreatePostDto {
   category: string;
   creatorName:string;
   creatorProfileImage:string
-  createdDate: Date;
+  createdAt: Date;
+  updatedAt:Date;
   content: any;
 }

@@ -10,19 +10,19 @@ export default function CustomSinglePost({
   category,
   creatorProfileImage,
   creatorName,
-  createdAt,
+  updatedAt,
 }) {
   let navigator = useNavigate();
-  createdAt = createdAt.substring(0, 10);
+  updatedAt = updatedAt.substring(0, 10);
   return (
     <>
-      <Col md={6} className="mb-4 animate__animated animate__fadeInUp">
+      <Col md={4} className="mb-4 animate__animated animate__fadeInUp">
         <Link to={`/posts/${postId}`} className="link" relative="path">
           <div className="imageContainer">
             <Image
               className="cardImage img-fluid"
               alt="cover"
-              src={`http://localhost:3001/postImages/${cover}`}
+              src={`http://localhost:3001/imagesPost/${cover}`}
             />
           </div>
         </Link>
@@ -48,7 +48,7 @@ export default function CustomSinglePost({
                   <img
                     className="avatarImage"
                     alt="cover"
-                    src={`http://localhost:3001/profileImages/${creatorProfileImage}`}
+                    src={`http://localhost:3001/imagesProfile/${creatorProfileImage}`}
                   ></img>
                 </div>
               ) : (
@@ -57,7 +57,7 @@ export default function CustomSinglePost({
             </Col>
             <Col md="auto" className="">
               <h6 className="m-0">{creatorName}</h6>
-              <span className="text-muted">{createdAt}</span>
+              <span className="text-muted">{updatedAt}</span>
             </Col>
           </Row>
         </Link>

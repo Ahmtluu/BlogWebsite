@@ -8,7 +8,7 @@ import Categories from "../components/Categories";
 import { useForm } from "react-hook-form";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { PostCreate } from "../services/PostService";
+import { CreatePost } from "../services/PostService";
 import { cookies } from "../services/UserService";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router";
@@ -37,9 +37,10 @@ export default function PostAdd() {
   const onSubmit = async (data) => {
     var token = cookies.get("jwt_authorization");
     var currentUser = jwt_decode(token);
-    await PostCreate(data, currentUser).then(() => {
+    await CreatePost(data, currentUser).then(()=>{
       usernavigate(`/profile/${currentUser.sub}`);
     });
+
   };
 
   return (

@@ -1,17 +1,29 @@
-import React, { useState } from "react";
-import { useLocation } from "react-router";
+import React, { useState,useEffect } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { Container, Form, Row, Col } from "react-bootstrap";
 import Select from "react-select";
-import { EditorState, convertToRaw } from "draft-js";
+import { EditorState, convertToRaw,ContentState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
 import { Editor } from "react-draft-wysiwyg";
 import Categories from "../components/Categories";
+import { UpdatePost } from "../services/PostService";
 
 export default function PostUpdate() {
   const location = useLocation();
   const currentPost = location.state.post;
+  const user=location.state.User;
   const [post, setPost] = useState(currentPost);
+
+  const content = htmlToDraft(post.content);
+  const state = ContentState.createFromBlockArray(
+   content.contentBlocks,
+   content.entityMap
+ );
+   
+ const [editorState, setEditorState] = useState(()=>EditorState.createWithContent(state));
+ const userNavigate = useNavigate();
 
   const {
     register,
@@ -20,9 +32,6 @@ export default function PostUpdate() {
     formState: { errors },
   } = useForm();
 
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
     const postContent = draftToHtml(
@@ -31,8 +40,10 @@ export default function PostUpdate() {
     setValue("content", postContent);
   };
 
-  function onSubmit(data) {
-    console.log(data);
+  async function onSubmit(data) {
+   await UpdatePost(data,post._id,user).then(()=>{
+    userNavigate(`/profile/${user.userId}`)
+   });
   }
 
   return post ? (

@@ -5,6 +5,7 @@ import ProfileDetail from "../components/ProfileDetail";
 import { GetCurrentUser } from "../services/UserService";
 import { Container } from "react-bootstrap";
 import { useParams } from "react-router";
+import { CircularProgress } from "react-loading-indicators";
 
 function Profile() {
   const [currentUser, setCurrentUser] = useState();
@@ -17,7 +18,7 @@ function Profile() {
   };
   useEffect(() => {
     getProfileData();
-  });
+  },[]);
 
   return (
     <>
@@ -26,16 +27,17 @@ function Profile() {
           {currentUser ? (
             <div className="col">
               <ProfileDetail
-                currentUser={currentUser}
-                getProfileData={getProfileData}
+                 userId={currentUser.sub}
               />
               <ProfileRecent
-                getProfileData={getProfileData}
-                currentUser={currentUser}
+              user={currentUser}
+               
               />
             </div>
           ) : (
-            <Container>Loading...</Container>
+            <Container className="d-flex justify-content-center">
+            <CircularProgress size="small" variant="dotted" color="#495579" />
+          </Container>
           )}
         </div>
       </div>

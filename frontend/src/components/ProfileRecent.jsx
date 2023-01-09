@@ -1,12 +1,12 @@
 import React, { useState, useEffect, lazy } from "react";
 import { Button, Row, Col, Card, Container } from "react-bootstrap";
-import { GetAllPosts, PostDelete } from "../services/PostService";
+import { GetAllPosts, DeletePost } from "../services/PostService";
 import { FaSync } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 
-export default function ProfileRecent({ currentUser, getProfileData }) {
+export default function ProfileRecent({user}) {
   const [userPosts, setUserPosts] = useState();
 
   let navigate = useNavigate();
@@ -16,7 +16,7 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
   };
 
   const deleteSelectedPost = async (id) => {
-    await PostDelete(id).then(() => {
+    await DeletePost(id).then(() => {
       getReleativePost();
     });
   };
@@ -24,11 +24,10 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
   useEffect(() => {
     getReleativePost();
   }, []);
-
   return (
     <>
-      <div className="d-flex justify-content-between align-items-center mb-1 mt-2">
-        <p className="lead fw-normal mb-0">Recent Posts</p>
+      <div className="d-flex justify-content-between align-items-center mb-2 mt-2">
+        <p className="lead fw-normal mb-0">Your All Posts</p>
         <div className="d-flex">
           {" "}
           <button
@@ -49,7 +48,7 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
               return (
                 <Col md={4} key={post._id}>
                   <Card
-                    className="mb-2"
+                    className="mb-4"
                     style={{
                       width: "100%",
                     }}
@@ -66,7 +65,7 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
                           overflow: "hidden",
                         }}
                         variant="top"
-                        src={`http://localhost:3001/postImages/${post.cover}`}
+                        src={`http://localhost:3001/imagesPost/${post.cover}`}
                       />
 
                       <Card.Body>
@@ -83,6 +82,7 @@ export default function ProfileRecent({ currentUser, getProfileData }) {
                             navigate(`/posts/${post._id}/update`, {
                               state: {
                                 post: post,
+                                User:user
                               },
                             });
                           }}

@@ -15,7 +15,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { diskStorage, memoryStorage } from 'multer';
+import { ProfileImageSharpPipe } from 'src/sharp.pipe';
 
 @Controller('user')
 export class UsersController {
@@ -44,18 +45,16 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileInterceptor('profileImg', {
-      storage: diskStorage({
-        destination: './uploads/profileImages',
-      }),
+      storage: memoryStorage(),
     }),
   )
   @Patch(':id')
   update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(ProfileImageSharpPipe) profileImage: string,
   ) {
-    return this.usersService.update(id, updateUserDto, file);
+    return this.usersService.update(id, updateUserDto, profileImage);
   }
 
   @UseGuards(JwtAuthGuard)

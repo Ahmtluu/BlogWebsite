@@ -19,7 +19,9 @@ export class Post {
   @Prop()
   creatorProfileImage:string
   @Prop()
-  createdDate: Date;
+  createdAt: Date;
+  @Prop()
+  updatedAt:Date;
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

@@ -19,7 +19,7 @@ function CustomPosts() {
   return (
     <>
       {posts ? (
-        <Container className="m-2">
+        <Container >
           <Row className="d-flex justify-content-between align-items-md-stretch py-2">
             {posts.map((post) => {
               return (
@@ -33,7 +33,7 @@ function CustomPosts() {
                     creatorName={post.creatorName}
                     creatorProfileImage={post.creatorProfileImage}
                     cover={post.cover}
-                    createdAt={post.createdDate}
+                    updatedAt={post.updatedAt}
                   />
                 </>
               );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Button,
@@ -9,26 +9,43 @@ import {
   Image,
 } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { EditorState, ContentState, convertToRaw } from "draft-js";
+import { convertToRaw, ContentState, EditorState } from "draft-js";
+import htmlToDraft from "html-to-draftjs";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import { UpdateUser } from "../services/UserService";
+import { GetCurrentUser } from "../services/UserService";
 
-export default function ProfileDetail({ currentUser, getProfileData }) {
-  const { register, handleSubmit, setValue } = useForm();
+export default function ProfileDetail({ userId }) {
+  const [currentUser, setUser] = useState();
+  const [editorState, setEditorState] = useState();
   const [modalShow, setModelShow] = useState(false);
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
+  const { register, handleSubmit, setValue } = useForm();
+  let content;
+  let state;
+
+  async function getUserData() {
+    const response = await GetCurrentUser(userId);
+    setUser(response);
+    if (currentUser) {
+      content = htmlToDraft(currentUser.about);
+      state = ContentState.createFromBlockArray(
+        content.contentBlocks,
+        content.entityMap
+      );
+      setEditorState(EditorState.createWithContent(state));
+    }
+  }
 
   const onHandleChange = () => {
     setModelShow(!modalShow);
   };
 
   const onSubmitHandle = async (data) => {
-    UpdateUser(currentUser.userId, data);
-    getProfileData();
-    setModelShow(!modalShow);
+    await UpdateUser(currentUser.userId, data).then(() => {
+      getUserData();
+      setModelShow(!modalShow);
+    });
   };
 
   const onEditorStateChange = (editorState) => {
@@ -39,23 +56,28 @@ export default function ProfileDetail({ currentUser, getProfileData }) {
     setValue("about", userAbout);
   };
 
+  useEffect(() => {
+    getUserData();
+  }, [modalShow]);
+
   return (
-    <Container>
-      {currentUser && (
+<>
+
+      {currentUser ? (
         <>
-          <Col xs={8}>
+          <Col >
             <Row>
-              <Col xs={4}>
+              <Col sm={2} xs={4}>
                 <Image
-                  src={`http://localhost:3001/profileImages/${currentUser.profileImg}`}
+                  src={`http://localhost:3001/imagesProfile/${currentUser.profileImg}`}
                   alt="Profile"
                   fluid={true}
                   className=" rounded"
                 />
               </Col>
-              <Col xs={8}>
+              <Col sm={10} xs={8}>
                 <h3 className="m-0">{currentUser.username}</h3>
-                <p>Jr. Full Stack (MERN) & React Native Dev</p>
+                <p>{currentUser.description}</p>
                 <h6 className="text-muted">About</h6>
                 <p
                   className="font-italic mb-1"
@@ -64,7 +86,6 @@ export default function ProfileDetail({ currentUser, getProfileData }) {
               </Col>
             </Row>
           </Col>
-
           <Button
             type="button"
             className="btn btn-dark mt-2"
@@ -72,102 +93,120 @@ export default function ProfileDetail({ currentUser, getProfileData }) {
           >
             Edit profile
           </Button>
+
+          <Modal show={modalShow} size={"xl"} onHide={onHandleChange}>
+            <Modal.Header>
+              <Modal.Title>Edit Profile</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <Row>
+                  <Col md={6}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Profile Image</Form.Label>
+                      <input
+                        type="file"
+                        id="profileImg"
+                        className="form-control"
+                        {...register("profileImg")}
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Username</Form.Label>
+                      <input
+                        type="text"
+                        id="formUsername"
+                        defaultValue={currentUser.username}
+                        className="form-control"
+                        {...register("username")}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col md={6}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Full Name</Form.Label>
+                      <input
+                        type="text"
+                        id="formFullName"
+                        defaultValue={currentUser.fullName}
+                        className="form-control"
+                        {...register("fullName")}
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Description</Form.Label>
+                      <input
+                        type="text"
+                        id="formDescription"
+                        defaultValue={currentUser.description}
+                        className="form-control"
+                        {...register("description")}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={6}>
+                    {" "}
+                    <Form.Group className="mb-3">
+                      <Form.Label>Email</Form.Label>
+                      <input
+                        type="email"
+                        id="formEmail"
+                        defaultValue={currentUser.email}
+                        className="form-control"
+                        {...register("email")}
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Password</Form.Label>
+                      <input
+                        type="password"
+                        id="formPassword"
+                        className="form-control"
+                        {...register("password")}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Form.Group className="mb-3">
+                  <Form.Label>About</Form.Label>
+                  <Editor
+                    editorState={editorState}
+                    onEditorStateChange={onEditorStateChange}
+                    wrapperClassName="wrapper-class"
+                    editorClassName="editor-class"
+                    toolbarClassName="toolbar-class"
+                  />
+                </Form.Group>
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={onHandleChange}>
+                Close
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+                onClick={handleSubmit(onSubmitHandle)}
+              >
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </>
+      ) : (
+        <p>Loading</p>
       )}
-      <Modal show={modalShow} size={"xl"} onHide={onHandleChange}>
-        <Modal.Header>
-          <Modal.Title>Edit Profile</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Row className="d-flex flex-row">
-              <Form.Group className="mb-3">
-                <Form.Label>Profile Image</Form.Label>
-                <input
-                  type="file"
-                  id="profileImg"
-                  className="form-control"
-                  {...register("profileImg")}
-                />
-              </Form.Group>
-              <Row>
-                <Col md={6}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Full Name</Form.Label>
-                    <input
-                      type="text"
-                      id="formFullName"
-                      defaultValue={currentUser.fullName}
-                      className="form-control"
-                      {...register("fullName")}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Username</Form.Label>
-                    <input
-                      type="text"
-                      id="formUsername"
-                      defaultValue={currentUser.username}
-                      className="form-control"
-                      {...register("username")}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row>
-                <Col md={6}>
-                  {" "}
-                  <Form.Group className="mb-3">
-                    <Form.Label>Email</Form.Label>
-                    <input
-                      type="email"
-                      id="formEmail"
-                      defaultValue={currentUser.email}
-                      className="form-control"
-                      {...register("email")}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Password</Form.Label>
-                    <input
-                      type="password"
-                      id="formPassword"
-                      className="form-control"
-                      {...register("password")}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-            </Row>
-            <Form.Group className="mb-3">
-              <Form.Label>About</Form.Label>
-              <Editor
-                editorState={editorState}
-                onEditorStateChange={onEditorStateChange}
-                wrapperClassName="wrapper-class"
-                editorClassName="editor-class"
-                toolbarClassName="toolbar-class"
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={onHandleChange}>
-            Close
-          </Button>
-          <Button
-            variant="primary"
-            type="submit"
-            onClick={handleSubmit(onSubmitHandle)}
-          >
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </Container>
+      </>
   );
 }

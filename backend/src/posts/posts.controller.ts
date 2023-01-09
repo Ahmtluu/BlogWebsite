@@ -15,15 +15,12 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { diskStorage,memoryStorage } from 'multer';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { PostImageSharpPipe } from 'src/sharp.pipe';
 
-
-export const storage = {
- 
-
-}
+export const storage = {};
 
 @Controller('posts')
 export class PostsController {
@@ -31,11 +28,16 @@ export class PostsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileInterceptor('cover',{ storage: diskStorage({
-    destination: './uploads/postImages'
-})}))
-  create(@Body() createPostDto: CreatePostDto, @UploadedFile() file: Express.Multer.File) {
-    return this.postsService.create(createPostDto, file);
+  @UseInterceptors(
+    FileInterceptor('cover', {
+      storage: memoryStorage(),
+    }),
+  )
+  create(
+    @Body() createPostDto: CreatePostDto,
+    @UploadedFile(PostImageSharpPipe) postCover: string,
+  ) {
+    return this.postsService.create(createPostDto, postCover);
   }
 
   @Get()
@@ -49,12 +51,18 @@ export class PostsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileInterceptor('cover',{storage: diskStorage({
-    destination: './uploads/postImages'
-  }),}))
+  @UseInterceptors(
+    FileInterceptor('cover', {
+      storage: memoryStorage(),
+    }),
+  )
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto,@UploadedFile() file: Express.Multer.File) {
-    return this.postsService.update(id, updatePostDto,file);
+  update(
+    @Param('id') id: string,
+    @Body() updatePostDto: UpdatePostDto,
+    @UploadedFile(PostImageSharpPipe) postCover: string,
+  ) {
+    return this.postsService.update(id, updatePostDto, postCover);
   }
 
   @UseGuards(JwtAuthGuard)
