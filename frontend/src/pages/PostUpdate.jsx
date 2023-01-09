@@ -9,6 +9,7 @@ import htmlToDraft from "html-to-draftjs";
 import { Editor } from "react-draft-wysiwyg";
 import Categories from "../components/Categories";
 import { UpdatePost } from "../services/PostService";
+import "../components/EditorStyle.css"
 
 export default function PostUpdate() {
   const location = useLocation();

@@ -16,6 +16,7 @@ function CustomPosts() {
     fetchData();
   }, []);
 
+
   return (
     <>
       {posts ? (
@@ -23,9 +24,7 @@ function CustomPosts() {
           <Row className="d-flex justify-content-between align-items-md-stretch py-2">
             {posts.map((post) => {
               return (
-                <>
-                  <CustomSinglePost
-                    key={post._id}
+                  <CustomSinglePost key={post._id}
                     postId={post._id}
                     title={post.title}
                     content={post.content}
@@ -35,7 +34,6 @@ function CustomPosts() {
                     cover={post.cover}
                     updatedAt={post.updatedAt}
                   />
-                </>
               );
             })}
           </Row>

@@ -6,8 +6,8 @@ export default function CustomCarrousel() {
   const styles = {
     imageContainer: {
       overflow: "hidden",
-      padding: "0px",
       borderRadius: "10px",
+      minHeight:"600px"
     },
     image: {
       width: "100%",
@@ -19,7 +19,7 @@ export default function CustomCarrousel() {
   return (
     <Container>
       <Row>
-        <Col md={7} className="align-self-center m-0 p-1">
+        <Col md={7} className="align-self-center">
           <h1 className="display-3 fst-italic mt-4 bold ">
             Cours Après Tes Rêves...
           </h1>

@@ -30,6 +30,7 @@ export default function CustomSinglePost({
           className="mt-2 mb-2"
           variant="secondary"
           onClick={() => {
+            /*TODO:lowerCase category */
             navigator(`categories/${category}`);
           }}
         >

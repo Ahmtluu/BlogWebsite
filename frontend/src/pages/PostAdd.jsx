@@ -12,6 +12,7 @@ import { CreatePost } from "../services/PostService";
 import { cookies } from "../services/UserService";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router";
+import "../components/EditorStyle.css"
 
 export default function PostAdd() {
   const {

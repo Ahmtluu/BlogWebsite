@@ -5,16 +5,17 @@ import {
   Form,
   Row,
   Col,
-  Container,
   Image,
 } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { convertToRaw, ContentState, EditorState } from "draft-js";
 import htmlToDraft from "html-to-draftjs";
-import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import { UpdateUser } from "../services/UserService";
 import { GetCurrentUser } from "../services/UserService";
+import { Editor } from "react-draft-wysiwyg";
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import "./EditorStyle.css"
 
 export default function ProfileDetail({ userId }) {
   const [currentUser, setUser] = useState();
@@ -60,6 +61,11 @@ export default function ProfileDetail({ userId }) {
     getUserData();
   }, [modalShow]);
 
+  const editorStyle={
+    borderStyle: "groove"
+  }
+
+
   return (
 <>
 
@@ -76,9 +82,9 @@ export default function ProfileDetail({ userId }) {
                 />
               </Col>
               <Col sm={10} xs={8}>
-                <h3 className="m-0">{currentUser.username}</h3>
-                <p>{currentUser.description}</p>
-                <h6 className="text-muted">About</h6>
+                <h2 className="m-0">{currentUser.username}</h2>
+                <h5 className="mb-4">{currentUser.description}</h5>
+                <h6 className="text-muted m-0">About</h6>
                 <p
                   className="font-italic mb-1"
                   dangerouslySetInnerHTML={{ __html: currentUser.about }}
@@ -95,7 +101,7 @@ export default function ProfileDetail({ userId }) {
           </Button>
 
           <Modal show={modalShow} size={"xl"} onHide={onHandleChange}>
-            <Modal.Header>
+            <Modal.Header closeButton>
               <Modal.Title>Edit Profile</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -183,9 +189,9 @@ export default function ProfileDetail({ userId }) {
                   <Editor
                     editorState={editorState}
                     onEditorStateChange={onEditorStateChange}
-                    wrapperClassName="wrapper-class"
-                    editorClassName="editor-class"
-                    toolbarClassName="toolbar-class"
+                    wrapperClassName="editor-wrapper"
+                    editorClassName="message-editor"
+                    toolbarClassName="message-toolbar"
                   />
                 </Form.Group>
               </Form>
