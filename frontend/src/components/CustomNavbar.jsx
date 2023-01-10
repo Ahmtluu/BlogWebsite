@@ -1,6 +1,6 @@
 import Container from "react-bootstrap/Container";
 import React, { useState, useEffect } from "react";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Navbar, Dropdown, Nav, NavDropdown } from "react-bootstrap";
 import { cookies } from "../services/UserService";
 import jwt_decode from "jwt-decode";
@@ -18,9 +18,9 @@ function CustomNavbar() {
     if (isLoggedIn) {
       const token = cookies.get("jwt_authorization");
       const decoded = jwt_decode(token);
-      await GetCurrentUser(decoded.sub).then((response) => {
-        setUser(response);
-      });
+      const response=await GetCurrentUser(decoded.sub);
+      setUser(response);
+      console.log(currentUser)
     }
   };
 
@@ -30,7 +30,8 @@ function CustomNavbar() {
       setCurrentScrollHeight(newScrollHeight);
     };
     getCurrentId();
-  }, []);
+    
+  }, [isLoggedIn]);
 
   const opacity = Math.min(currentScrollHeight / 50, 1);
   const duration = 300;
@@ -48,41 +49,42 @@ function CustomNavbar() {
       <Container>
         <Navbar.Brand href="/">Met'utia</Navbar.Brand>
 
+        <Navbar.Toggle aria-controls="basic-navbar-nav " />
+        <Navbar.Collapse className="justify-content-end">
+          <Nav className="m-0">
+            {currentUser ? (
+              <NavDropdown title={currentUser.username}>
+                {pathname.includes("/profile") ? (
+                  <div></div>
+                ) : (
+                  <>
+                    <Dropdown.Item href={`/profile/${currentUser.userId}`}>
+                      Profil
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                  </>
+                )}
 
-            <Navbar.Toggle aria-controls="basic-navbar-nav " />
-            <Navbar.Collapse className="justify-content-end">
-              <Nav className="m-0">
-              {currentUser ?
-                <NavDropdown title={currentUser.username}>
-                  {pathname.includes("/profile") ? (
-                    <div></div>
-                  ) : (
-                    <>
-                      <Dropdown.Item href={`/profile/${currentUser.userId}`}>
-                        Profil
-                      </Dropdown.Item>
-                      <Dropdown.Divider />
-                    </>
-                  )}
-
-                  <Dropdown.Item
-                    onClick={() => {
-                      cookies.remove("jwt_authorization", { path: "/" });
-                      cookies.remove("isAuth", { path: "/" });
-                      setUser();
-                      navigate("/");
-                    }}
-                  >
-                    Çıkış
-                  </Dropdown.Item>
-                </NavDropdown>
-                 : <Navbar.Text>
-                  <Link to="/login" className="text-decoration-none">Login</Link>
-                
-               </Navbar.Text>
-        }
-              </Nav>
-            </Navbar.Collapse>
+                <Dropdown.Item
+                  onClick={() => {
+                    cookies.remove("jwt_authorization", { path: "/" });
+                    cookies.remove("isAuth", { path: "/" });
+                    setUser();
+                    navigate("/");
+                  }}
+                >
+                  Çıkış
+                </Dropdown.Item>
+              </NavDropdown>
+            ) : (
+              <Navbar.Text>
+                <Link to="/login" className="text-decoration-none">
+                  Login
+                </Link>
+              </Navbar.Text>
+            )}
+          </Nav>
+        </Navbar.Collapse>
       </Container>
     </Navbar>
   );

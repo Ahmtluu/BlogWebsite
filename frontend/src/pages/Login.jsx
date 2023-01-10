@@ -4,12 +4,12 @@ import { useForm } from "react-hook-form";
 import { UserLogin } from "../services/UserService";
 import { cookies } from "../services/UserService";
 import { useNavigate } from "react-router-dom";
-import backgroundImage from "../assets/images/loginBackground.svg";
+import backgroundImage from "../assets/images/Login.gif";
 function Login() {
   const { register, handleSubmit } = useForm();
   const [isDone, setStatus] = useState(true);
   let navigate = useNavigate();
-
+  
   const OnSubmit = async (data) => {
     try {
       await UserLogin(data).then((response) => {
@@ -24,28 +24,24 @@ function Login() {
   };
 
   return (
-    <Col
+
+    <Container
       style={{
-        height: "100vh",
-        widht: "100vh",
-        backgroundImage: `url(${backgroundImage})`,
+       
+        weight: "100vw",
       }}
-      className=" d-flex flex-column justify-content-center align-items-center "
+      className="d-flex align-items-center justify-content-center "
     >
-      <Row className="">
-        <Container
-          style={{
-            border: "solid",
-            borderWidth: "5px",
-            borderRadius: "15px",
-            borderColor: `rgba(73, 85, 121, 0.2)`,
-            width: "300px",
-          }}
+      <Row className="align-items-center w-100 h-100 ">
+        <Col
+          md={6}
+          className=" d-flex flex-column align-items-center justify-content-center"
         >
-          <Container className="pt-4">
-            <h2 className="text-center pb-4">Hoşgeldin!</h2>
-          </Container>
-          <Form onSubmit={handleSubmit(OnSubmit)}>
+          <h3 className="text-start fw-bold mb-4">Welcome</h3>
+          <Form
+            onSubmit={handleSubmit(OnSubmit)}
+            className="w-75 align-items-center "
+          >
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email Adresi</Form.Label>
               <input
@@ -64,24 +60,32 @@ function Login() {
               />
             </Form.Group>
 
-            <Container className="d-flex justify-content-end p-0 mb-2">
-              <Button variant="dark" type="submit" className="w-50">
-                Login
-              </Button>
-            </Container>
+            <Button variant="dark" type="submit" className="w-100">
+              Login
+            </Button>
           </Form>
-        </Container>
+
+          {isDone === false ? (
+            <Row className="m-1 pt-2">
+              <div className="alert alert-danger" role="alert">
+                Girmiş olduğun email veya parola hatalı. Lütfen kontrol et.
+              </div>
+            </Row>
+          ) : (
+            <></>
+          )}
+        </Col>
+        <Col md={6} className="h-100 d-flex flex-column align-items-center justify-content-center" style={{}}>
+        <img src={backgroundImage} alt="loading..." />
+</Col>
       </Row>
-      {isDone === false ? (
-        <Row className="m-1 pt-2">
-          <div className="alert alert-danger" role="alert">
-            Girmiş olduğun email veya parola hatalı. Lütfen kontrol et.
-          </div>
-        </Row>
-      ) : (
-        <></>
-      )}
-    </Col>
+    </Container>
   );
 }
 export default Login;
+
+/*          
+          
+          
+          
+          */

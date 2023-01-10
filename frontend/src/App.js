@@ -18,14 +18,15 @@ function App() {
   let isLoggedIn = cookies.get("isAuth");
   return (
     <>
-      {location.pathname !== "/login" ? <CustomNavbar /> : <></>}
+      <CustomNavbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="posts/:_id" element={<PostDetail />} />
         <Route path="categories/:title" element={<CategorisedPost />} />
-        <Route path="login" element={<Login />} />
         <Route path="author/:username" element={<Author />} />
+
         <Route element={<ProtectedRoutes isLoggedIn={isLoggedIn} />}>
+          <Route path="login" element={<Login />} />
           <Route path="posts/:_id/update" element={<PostUpdate />} />
           <Route path="posts/add_new" element={<PostAdd />} />
           <Route path="profile/:id" element={<Profile />} />

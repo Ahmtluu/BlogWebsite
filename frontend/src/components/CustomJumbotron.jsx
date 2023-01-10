@@ -19,7 +19,7 @@ export default function CustomCarrousel() {
   return (
     <Container>
       <Row>
-        <Col md={7} className="align-self-center">
+        <Col md={6} className="align-self-center">
           <h1 className="display-3 fst-italic mt-4 bold ">
             Cours Après Tes Rêves...
           </h1>
@@ -29,7 +29,7 @@ export default function CustomCarrousel() {
             contents.
           </p>
         </Col>
-        <Col md={5}>
+        <Col md={6}>
           <Container fluid style={styles.imageContainer}>
             <Image style={styles.image} src={jumbotronImage} />
           </Container>
