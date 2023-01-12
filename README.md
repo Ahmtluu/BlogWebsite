@@ -2,3 +2,4 @@
 ###### Frontend:React 
 ###### Backend:NestJS
 ###### Database:MongoDB
+###### Package Manager:Yarn
