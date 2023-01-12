@@ -1,52 +1,35 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router";
-import profileImage from "../assets/images/profileImage.png";
-import { GetCurrentUser } from "../services/UserService";
+import React from "react";
+import { Col, Row, Image, Container } from "react-bootstrap";
+import { CircularProgress } from "react-loading-indicators";
 
-export default function AuthorDetail() {
-  const { username } = useParams();
-  const [author, setAuthor] = useState();
-
-  const fetchAuthorData = async () => {
-    const response = await GetCurrentUser(username);
-    setAuthor(response);
-  };
-  useEffect(() => {
-    fetchAuthorData();
-  });
-
-  return author ? (
+export default function AuthorDetail({ currentAuthor }) {
+  return currentAuthor ? (
     <>
-      {" "}
-      <div
-        className="rounded-top text-white d-flex flex-row"
-        style={{ backgroundColor: "#000", height: "200px" }}
-      >
-        <div
-          className="ms-4 mt-5 d-flex flex-column"
-          style={{ width: "150px" }}
-        >
-          <img
-            src={profileImage}
-            alt="Generic placeholder"
-            className="img-fluid img-thumbnail mt-4 mb-2"
-            style={{ width: "150px", zIndex: "1" }}
-          />
-        </div>
-        <div className="ms-3" style={{ marginTop: "150px" }}>
-          <h5>{author.username}</h5>
-        </div>
-      </div>
-      <div className="p-4 text-black" style={{ backgroundColor: "#f8f9fa" }}>
-        <div className="d-flex justify-content-end text-center py-1">
-          <div>
-            <p className="mb-1 h5">253</p>
-            <p className="small text-muted mb-0">Total Posts</p>
-          </div>
-        </div>
-      </div>{" "}
+      <Col>
+        <Row>
+          <Col sm={2} xs={4}>
+            <Image
+              src={`http://localhost:3001/imagesProfile/${currentAuthor.profileImg}`}
+              alt="Profile"
+              fluid={true}
+              className=" rounded"
+            />
+          </Col>
+          <Col sm={10} xs={8}>
+            <h2 className="m-0">{currentAuthor.username}</h2>
+            <h5 className="mb-4">{currentAuthor.description}</h5>
+            <h6 className="text-muted m-0">About</h6>
+            <p
+              className="font-italic mb-1"
+              dangerouslySetInnerHTML={{ __html: currentAuthor.about }}
+            />
+          </Col>
+        </Row>
+      </Col>
     </>
   ) : (
-    <div>Loading</div>
+    <Container className="d-flex justify-content-center">
+      <CircularProgress size="small" variant="dotted" color="#495579" />
+    </Container>
   );
 }

@@ -5,8 +5,9 @@ import { FaSync } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { CircularProgress } from "react-loading-indicators";
 
-export default function ProfileRecent({user}) {
+export default function ProfileRecent({ user }) {
   const [userPosts, setUserPosts] = useState();
 
   let navigate = useNavigate();
@@ -27,7 +28,14 @@ export default function ProfileRecent({user}) {
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-2 mt-2">
-        <p className="lead fw-normal mb-0">Your All Posts</p>
+        <p
+          className="lead fw-normal mb-0"
+          style={{
+            color: "#495579",
+          }}
+        >
+          Your All Posts
+        </p>
         <div className="d-flex">
           {" "}
           <button
@@ -82,7 +90,7 @@ export default function ProfileRecent({user}) {
                             navigate(`/posts/${post._id}/update`, {
                               state: {
                                 post: post,
-                                User:user
+                                User: user,
                               },
                             });
                           }}
@@ -110,7 +118,9 @@ export default function ProfileRecent({user}) {
             <Container>Henüz bir paylaşım yapmadın!</Container>
           )
         ) : (
-          <Container>Loading</Container>
+          <Container className="d-flex justify-content-center">
+            <CircularProgress size="small" variant="dotted" color="#495579" />
+          </Container>
         )}
       </Row>
     </>

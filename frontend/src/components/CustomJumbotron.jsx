@@ -7,7 +7,7 @@ export default function CustomCarrousel() {
     imageContainer: {
       overflow: "hidden",
       borderRadius: "10px",
-      minHeight:"600px"
+      minHeight: "640px",
     },
     image: {
       width: "100%",
