@@ -33,10 +33,9 @@ export class UsersService {
         } else {
           const newUser = new this.userModel(usr);
           newUser.username = usr.username;
-          newUser.about = usr.about;
           newUser.profileImg = usr.profileImg;
           newUser.fullName = usr.fullName;
-          newUser.description=usr.description;
+          newUser.description = usr.description;
           newUser.email = usr.email;
           newUser.password = password;
           newUser.createdAt = new Date();
@@ -87,9 +86,8 @@ export class UsersService {
             username: user.username,
             fullName: user.fullName,
             profileImg: user.profileImg,
-            description:user.description,
+            description: user.description,
             email: user.email,
-            about: user.about,
           };
           return currentUser;
         } else {
@@ -108,9 +106,8 @@ export class UsersService {
           user.username = usr.username;
           user.fullName = usr.fullName;
           user.email = usr.email;
-          user.about = usr.about;
-          user.description=usr.description;
-          if(profileImage) user.profileImg = profileImage;
+          user.description = usr.description;
+          if (profileImage) user.profileImg = profileImage;
 
           if (usr.password) {
             const match = this.checkPassword(usr.password, user.password);

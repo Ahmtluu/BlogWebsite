@@ -16,7 +16,7 @@ export default function CustomSinglePost({
   updatedAt = updatedAt.substring(0, 10);
   return (
     <>
-      <Col md={4} className="mb-4">
+      <Col md={6} lg={4} className="mb-4">
         <Link to={`/posts/${postId}`} className="link" relative="path">
           <div className="imageContainer">
             <Image

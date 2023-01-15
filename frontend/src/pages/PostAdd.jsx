@@ -1,20 +1,19 @@
-import React, { useState } from "react";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import Select from "react-select";
-import { EditorState } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Categories from "../components/Categories";
 import { useForm } from "react-hook-form";
-import { convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
 import { CreatePost } from "../services/PostService";
 import { cookies } from "../services/UserService";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router";
-import "../components/EditorStyle.css"
+
+import React, { useState, useRef, useMemo } from "react";
+import JoditEditor from "jodit-react";
 
 export default function PostAdd() {
+  const editor = useRef(null);
+  const [content, setContent] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -23,31 +22,39 @@ export default function PostAdd() {
   } = useForm();
   let usernavigate = useNavigate();
 
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
+  const config = useMemo(
+    () => ({
+      readonly: false, // all options from https://xdsoft.net/jodit/doc/,
+      placeholder: "Start typings...",
+    }),
+
+    []
   );
 
-  const onEditorStateChange = (editorState) => {
-    setEditorState(editorState);
-    const postContent = draftToHtml(
-      convertToRaw(editorState.getCurrentContent())
-    );
-    setValue("content", postContent);
-  };
-
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     var token = cookies.get("jwt_authorization");
     var currentUser = jwt_decode(token);
-    await CreatePost(data, currentUser).then(()=>{
+    try {
+      CreatePost(data, currentUser);
       usernavigate(`/profile/${currentUser.sub}`);
-    });
-
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  /* TODO:Form Validation */
 
   return (
     <Container>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Row className="w-100">
+        <Row className="flex-row-reverse">
+          <Col lg={6} className="d-flex justify-content-end">
+            <Button variant="secondary" type="submit" className="w-25">
+              Add
+            </Button>
+          </Col>
+        </Row>
+        <Row>
           <Col>
             <Form.Group className="mb-3">
               <Form.Label>Cover Image</Form.Label>
@@ -80,6 +87,9 @@ export default function PostAdd() {
               <Form.Label>Category</Form.Label>
               <Select
                 options={Categories}
+                defaultValue={Categories.filter(
+                  (category) => category.value === Categories[0].value
+                )}
                 onChange={(event) => setValue("category", event.value)}
               />
             </Form.Group>
@@ -87,15 +97,16 @@ export default function PostAdd() {
         </Row>
         <Form.Group className="mb-3">
           <Form.Label>Content</Form.Label>
-          <Editor
-            editorState={editorState}
-            onEditorStateChange={onEditorStateChange}
-            wrapperClassName="wrapper-class"
-            editorClassName="editor-class"
-            toolbarClassName="toolbar-class"
+          <JoditEditor
+            ref={editor}
+            value={content}
+            config={config}
+            tabIndex={1}
+            onChange={(newContent) => {
+              setValue("content", newContent);
+            }}
           />
         </Form.Group>
-        <input type="submit" className="btn btn-primary" />
       </Form>
     </Container>
   );

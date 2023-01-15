@@ -5,12 +5,11 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { Model } from 'mongoose';
 import { PostDocument, Post } from '../schemas/post.shema';
 
-
 @Injectable()
 export class PostsService {
   constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}
 
-  async create(pst: CreatePostDto, postCover:string) {
+  async create(pst: CreatePostDto, postCover: string) {
     return await this.postModel
       .findOne({ title: pst.title })
       .exec()
@@ -19,14 +18,14 @@ export class PostsService {
           const newPost = new this.postModel(post);
           newPost.title = pst.title;
           newPost.content = pst.content;
-          if(postCover){
+          if (postCover) {
             newPost.cover = postCover;
           }
           newPost.category = pst.category;
-          newPost.creatorName=pst.creatorName
-          newPost.creatorProfileImage=pst.creatorProfileImage;
+          newPost.creatorName = pst.creatorName;
+          newPost.creatorProfileImage = pst.creatorProfileImage;
           newPost.createdAt = new Date();
-          newPost.updatedAt=new Date();
+          newPost.updatedAt = new Date();
           newPost.save();
           return newPost;
         } else {
@@ -51,18 +50,19 @@ export class PostsService {
         }
       });
   }
-  async update(id: string, post: UpdatePostDto,postCover:string) {
+  async update(id: string, post: UpdatePostDto, postCover: string) {
     return await this.postModel
       .findOne({ _id: id })
       .exec()
       .then((foundedPost) => {
         if (foundedPost) {
-          if(postCover){
-            foundedPost.cover =  postCover;
+          if (postCover) {
+            foundedPost.cover = postCover;
           }
           foundedPost.title = post.title;
-          foundedPost.creatorName=post.creatorName
-          foundedPost.creatorProfileImage=post.creatorProfileImage;
+          foundedPost.creatorName = post.creatorName;
+          foundedPost.creatorProfileImage = post.creatorProfileImage;
+          foundedPost.category = post.category;
           foundedPost.updatedAt = new Date();
           foundedPost.content = post.content;
           foundedPost.save();

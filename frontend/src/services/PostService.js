@@ -4,7 +4,7 @@ import { cookies, GetCurrentUser } from "./UserService";
 const authKey = cookies.get("jwt_authorization");
 const config = {
   headers: {
-    Authorization: `Bearer ${authKey}` 
+    Authorization: `Bearer ${authKey}`,
   },
 };
 
@@ -33,7 +33,6 @@ const GetPost = async (id) => {
 };
 //Post create
 const CreatePost = async (data, user) => {
-
   const currentUser = await GetCurrentUser(user.sub);
   const formData = new FormData();
   formData.append("title", data.title);

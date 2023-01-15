@@ -1,30 +1,32 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
-import { Container, Form, Row, Col } from "react-bootstrap";
+import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import Select from "react-select";
-import { EditorState, convertToRaw,ContentState } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
-import { Editor } from "react-draft-wysiwyg";
 import Categories from "../components/Categories";
 import { UpdatePost } from "../services/PostService";
-import "../components/EditorStyle.css"
+
+import JoditEditor from "jodit-react";
+import "../components/EditorStyle.css";
 
 export default function PostUpdate() {
   const location = useLocation();
   const currentPost = location.state.post;
-  const user=location.state.User;
+  const user = location.state.User;
   const [post, setPost] = useState(currentPost);
 
-  const content = htmlToDraft(post.content);
-  const state = ContentState.createFromBlockArray(
-   content.contentBlocks,
-   content.entityMap
- );
-   
- const [editorState, setEditorState] = useState(()=>EditorState.createWithContent(state));
- const userNavigate = useNavigate();
+  const editor = useRef(null);
+  const [content, setContent] = useState(post.content);
+
+  const config = useMemo(
+    () => ({
+      readonly: false,
+      placeholder: "Start typing...",
+    }),
+    []
+  );
+
+  const userNavigate = useNavigate();
 
   const {
     register,
@@ -33,24 +35,33 @@ export default function PostUpdate() {
     formState: { errors },
   } = useForm();
 
-  const onEditorStateChange = (editorState) => {
-    setEditorState(editorState);
-    const postContent = draftToHtml(
-      convertToRaw(editorState.getCurrentContent())
-    );
-    setValue("content", postContent);
-  };
-
   async function onSubmit(data) {
-   await UpdatePost(data,post._id,user).then(()=>{
-    userNavigate(`/profile/${user.userId}`)
-   });
+    try {
+      await UpdatePost(data, post._id, user).then(() =>
+        userNavigate(`/profile/${user.userId}`)
+      );
+    } catch (error) {
+      /**TODO send error to user */
+      console.log(error);
+    }
   }
 
+  useEffect(() => {
+    setValue("category", post.category);
+  }, [post]);
+
+  /**TODO:Form Validation */
   return post ? (
     <Container>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Row className="w-100">
+        <Row className="flex-row-reverse">
+          <Col lg={6} className="d-flex justify-content-end">
+            <Button variant="secondary" type="submit" className="w-25">
+              Update
+            </Button>
+          </Col>
+        </Row>
+        <Row>
           <Col>
             <Form.Group className="mb-3">
               <Form.Label>Cover Image</Form.Label>
@@ -84,22 +95,29 @@ export default function PostUpdate() {
               <Form.Label>Category</Form.Label>
               <Select
                 options={Categories}
-                onChange={(event) => setValue("category", event.value)}
+                defaultValue={Categories.filter(
+                  (category) => category.value === post.category
+                )}
+                onChange={(event) => {
+                  setValue("category", event.value);
+                }}
               />
             </Form.Group>
           </Col>
         </Row>
         <Form.Group className="mb-3">
           <Form.Label>Content</Form.Label>
-          <Editor
-            editorState={editorState}
-            onEditorStateChange={onEditorStateChange}
-            wrapperClassName="wrapper-class"
-            editorClassName="editor-class"
-            toolbarClassName="toolbar-class"
+          <JoditEditor
+            ref={editor}
+            value={content}
+            config={config}
+            tabIndex={1} // tabIndex of textarea
+            onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+            onChange={(newContent) => {
+              setValue("content", newContent);
+            }}
           />
         </Form.Group>
-        <input type="submit" className="btn btn-primary" />
       </Form>
     </Container>
   ) : (

@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  Button,
-  Form,
-  Row,
-  Col,
-  Image,
-} from "react-bootstrap";
+import { Modal, Button, Form, Row, Col, Image } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { convertToRaw, ContentState, EditorState } from "draft-js";
 import htmlToDraft from "html-to-draftjs";
@@ -14,8 +7,8 @@ import draftToHtml from "draftjs-to-html";
 import { UpdateUser } from "../services/UserService";
 import { GetCurrentUser } from "../services/UserService";
 import { Editor } from "react-draft-wysiwyg";
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import "./EditorStyle.css"
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "./EditorStyle.css";
 
 export default function ProfileDetail({ userId }) {
   const [currentUser, setUser] = useState();
@@ -35,6 +28,7 @@ export default function ProfileDetail({ userId }) {
         content.entityMap
       );
       setEditorState(EditorState.createWithContent(state));
+      setValue("about", currentUser.about);
     }
   }
 
@@ -61,17 +55,15 @@ export default function ProfileDetail({ userId }) {
     getUserData();
   }, [modalShow]);
 
-  const editorStyle={
-    borderStyle: "groove"
-  }
-
+  const editorStyle = {
+    borderStyle: "groove",
+  };
 
   return (
-<>
-
+    <>
       {currentUser ? (
         <>
-          <Col >
+          <Col>
             <Row>
               <Col sm={2} xs={4}>
                 <Image
@@ -131,7 +123,6 @@ export default function ProfileDetail({ userId }) {
                     </Form.Group>
                   </Col>
                 </Row>
-
                 <Row>
                   <Col md={6}>
                     <Form.Group className="mb-3">
@@ -184,22 +175,9 @@ export default function ProfileDetail({ userId }) {
                     </Form.Group>
                   </Col>
                 </Row>
-                <Form.Group className="mb-3">
-                  <Form.Label>About</Form.Label>
-                  <Editor
-                    editorState={editorState}
-                    onEditorStateChange={onEditorStateChange}
-                    wrapperClassName="editor-wrapper"
-                    editorClassName="message-editor"
-                    toolbarClassName="message-toolbar"
-                  />
-                </Form.Group>
               </Form>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={onHandleChange}>
-                Close
-              </Button>
               <Button
                 variant="primary"
                 type="submit"
@@ -213,6 +191,6 @@ export default function ProfileDetail({ userId }) {
       ) : (
         <p>Loading</p>
       )}
-      </>
+    </>
   );
 }

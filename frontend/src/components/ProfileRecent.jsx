@@ -13,7 +13,10 @@ export default function ProfileRecent({ user }) {
   let navigate = useNavigate();
   const getReleativePost = async () => {
     const response = await GetAllPosts();
-    setUserPosts(response);
+    var filteredPosts = response.filter(function (post) {
+      return post.creatorName == user.username;
+    });
+    setUserPosts(filteredPosts);
   };
 
   const deleteSelectedPost = async (id) => {
@@ -24,10 +27,11 @@ export default function ProfileRecent({ user }) {
 
   useEffect(() => {
     getReleativePost();
-  }, []);
+  }, [user]);
+
   return (
     <>
-      <div className="d-flex justify-content-between align-items-center mb-2 mt-2">
+      <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
         <p
           className="lead fw-normal mb-0"
           style={{
@@ -54,7 +58,7 @@ export default function ProfileRecent({ user }) {
           userPosts.length > 0 ? (
             userPosts.map((post) => {
               return (
-                <Col md={4} key={post._id}>
+                <Col md={6} lg={4} key={post._id}>
                   <Card
                     className="mb-4"
                     style={{
