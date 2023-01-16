@@ -7,4 +7,5 @@ export class CreateUserDto {
   password: string;
   createdAt: Date;
   updatedAt: Date;
+  about: string;
 }

@@ -22,6 +22,7 @@ export default function PostUpdate() {
     () => ({
       readonly: false,
       placeholder: "Start typing...",
+      defaultActionOnPaste: "insert_only_text",
       uploader: {
         insertImageAsBase64URI: true,
       },

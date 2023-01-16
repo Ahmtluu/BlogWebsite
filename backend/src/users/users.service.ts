@@ -38,6 +38,7 @@ export class UsersService {
           newUser.description = usr.description;
           newUser.email = usr.email;
           newUser.password = password;
+          newUser.about = usr.about;
           newUser.createdAt = new Date();
           newUser.updatedAt = new Date();
           newUser.save();
@@ -87,6 +88,7 @@ export class UsersService {
             fullName: user.fullName,
             profileImg: user.profileImg,
             description: user.description,
+            about: user.about,
             email: user.email,
           };
           return currentUser;
@@ -107,6 +109,7 @@ export class UsersService {
           user.fullName = usr.fullName;
           user.email = usr.email;
           user.description = usr.description;
+          user.about = usr.about;
           if (profileImage) user.profileImg = profileImage;
 
           if (usr.password) {

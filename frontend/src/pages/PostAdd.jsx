@@ -26,11 +26,11 @@ export default function PostAdd() {
     () => ({
       readonly: false, // all options from https://xdsoft.net/jodit/doc/,
       placeholder: "Start typings...",
+      defaultActionOnPaste: "insert_only_text",
       uploader: {
         insertImageAsBase64URI: true,
       },
     }),
-
     []
   );
 

@@ -1,36 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Modal, Button, Form, Row, Col, Image } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { convertToRaw, ContentState, EditorState } from "draft-js";
-import htmlToDraft from "html-to-draftjs";
-import draftToHtml from "draftjs-to-html";
 import { UpdateUser } from "../services/UserService";
 import { GetCurrentUser } from "../services/UserService";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import "./EditorStyle.css";
+import JoditEditor from "jodit-react";
 
 export default function ProfileDetail({ userId }) {
   const [currentUser, setUser] = useState();
-  const [editorState, setEditorState] = useState();
   const [modalShow, setModelShow] = useState(false);
   const { register, handleSubmit, setValue } = useForm();
-  let content;
-  let state;
 
   async function getUserData() {
     const response = await GetCurrentUser(userId);
     setUser(response);
     if (currentUser) {
-      content = htmlToDraft(currentUser.about);
-      state = ContentState.createFromBlockArray(
-        content.contentBlocks,
-        content.entityMap
-      );
-      setEditorState(EditorState.createWithContent(state));
       setValue("about", currentUser.about);
     }
   }
+
+  const editor = useRef(null);
+  const [content, setContent] = useState();
+  const config = useMemo(
+    () => ({
+      readonly: false,
+      defaultActionOnPaste: "insert_only_text",
+      placeholder: "Start typing...",
+      buttons:
+        "bold,italic,underline,strikethrough,eraser,ul,ol,font,fontsize,paragraph,classSpan,lineHeight,superscript,subscript",
+    }),
+    []
+  );
 
   const onHandleChange = () => {
     setModelShow(!modalShow);
@@ -43,21 +42,10 @@ export default function ProfileDetail({ userId }) {
     });
   };
 
-  const onEditorStateChange = (editorState) => {
-    setEditorState(editorState);
-    const userAbout = draftToHtml(
-      convertToRaw(editorState.getCurrentContent())
-    );
-    setValue("about", userAbout);
-  };
-
   useEffect(() => {
     getUserData();
+    if (currentUser) setContent(currentUser.about);
   }, [modalShow]);
-
-  const editorStyle = {
-    borderStyle: "groove",
-  };
 
   return (
     <>
@@ -75,7 +63,7 @@ export default function ProfileDetail({ userId }) {
               </Col>
               <Col sm={10} xs={8}>
                 <h2 className="m-0">{currentUser.username}</h2>
-                <h5 className="mb-4">{currentUser.description}</h5>
+                <h5 className="mb-4 text-muted">{currentUser.description}</h5>
                 <h6 className="text-muted m-0">About</h6>
                 <p
                   className="font-italic mb-1"
@@ -174,6 +162,16 @@ export default function ProfileDetail({ userId }) {
                       />
                     </Form.Group>
                   </Col>
+                  <JoditEditor
+                    ref={editor}
+                    value={content}
+                    config={config}
+                    tabIndex={1}
+                    onBlur={(newContent) => setContent(newContent)}
+                    onChange={(newContent) => {
+                      setValue("about", newContent);
+                    }}
+                  />
                 </Row>
               </Form>
             </Modal.Body>
