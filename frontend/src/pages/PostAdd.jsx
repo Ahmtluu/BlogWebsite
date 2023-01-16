@@ -24,7 +24,7 @@ export default function PostAdd() {
 
   const config = useMemo(
     () => ({
-      readonly: false, // all options from https://xdsoft.net/jodit/doc/,
+      readonly: false,
       placeholder: "Start typings...",
       defaultActionOnPaste: "insert_only_text",
       uploader: {

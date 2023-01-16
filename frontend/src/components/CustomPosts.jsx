@@ -19,25 +19,23 @@ function CustomPosts() {
   return (
     <>
       {posts ? (
-        <Container>
-          <Row>
-            {posts.map((post) => {
-              return (
-                <CustomSinglePost
-                  key={post._id}
-                  postId={post._id}
-                  title={post.title}
-                  content={post.content}
-                  category={post.category}
-                  creatorName={post.creatorName}
-                  creatorProfileImage={post.creatorProfileImage}
-                  cover={post.cover}
-                  updatedAt={post.updatedAt}
-                />
-              );
-            })}
-          </Row>
-        </Container>
+        <Row className="mx-2">
+          {posts.map((post) => {
+            return (
+              <CustomSinglePost
+                key={post._id}
+                postId={post._id}
+                title={post.title}
+                content={post.content}
+                category={post.category}
+                creatorName={post.creatorName}
+                creatorProfileImage={post.creatorProfileImage}
+                cover={post.cover}
+                updatedAt={post.updatedAt}
+              />
+            );
+          })}
+        </Row>
       ) : (
         <Container className="d-flex justify-content-center">
           <CircularProgress size="small" variant="dotted" color="#495579" />

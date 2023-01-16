@@ -37,9 +37,10 @@ export default function CustomSinglePost({
           {category}
         </Button>
         <Link to={`/posts/${postId}`} className="link" relative="path">
-          <h2 dangerouslySetInnerHTML={{ __html: title }}></h2>
-          <p className="text" dangerouslySetInnerHTML={{ __html: content }}></p>
+          <h2 dangerouslySetInnerHTML={{ __html: title }}></h2>{" "}
         </Link>
+        <p className="text" dangerouslySetInnerHTML={{ __html: content }}></p>
+
         <Link to={`/author/${creatorName}`} className="link" relative="path">
           <Row className="mb-2">
             <Col md="auto">
