@@ -14,7 +14,7 @@ export default function ProfileRecent({ user }) {
   const getReleativePost = async () => {
     const response = await GetAllPosts();
     var filteredPosts = response.filter(function (post) {
-      return post.creatorName == user.username;
+      return post.author.username == user.username;
     });
     setUserPosts(filteredPosts);
   };

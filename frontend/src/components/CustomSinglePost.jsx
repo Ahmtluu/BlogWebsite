@@ -8,8 +8,8 @@ export default function CustomSinglePost({
   postId,
   content,
   category,
-  creatorProfileImage,
-  creatorName,
+  authorProfileImage,
+  authorName,
   updatedAt,
 }) {
   let navigator = useNavigate();
@@ -41,16 +41,16 @@ export default function CustomSinglePost({
         </Link>
         <p className="text" dangerouslySetInnerHTML={{ __html: content }}></p>
 
-        <Link to={`/author/${creatorName}`} className="link" relative="path">
+        <Link to={`/author/${authorName}`} className="link" relative="path">
           <Row className="mb-2">
             <Col md="auto">
               {" "}
-              {creatorProfileImage ? (
+              {authorProfileImage ? (
                 <div className="avatarImageColumn">
                   <img
                     className="avatarImage"
                     alt="cover"
-                    src={`http://localhost:3001/imagesProfile/${creatorProfileImage}`}
+                    src={`http://localhost:3001/imagesProfile/${authorProfileImage}`}
                   ></img>
                 </div>
               ) : (
@@ -58,7 +58,7 @@ export default function CustomSinglePost({
               )}
             </Col>
             <Col md="auto" className="">
-              <h6 className="m-0">{creatorName}</h6>
+              <h6 className="m-0">{authorName}</h6>
               <span className="text-muted">{updatedAt}</span>
             </Col>
           </Row>

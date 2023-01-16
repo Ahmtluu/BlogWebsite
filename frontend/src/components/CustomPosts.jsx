@@ -28,8 +28,8 @@ function CustomPosts() {
                 title={post.title}
                 content={post.content}
                 category={post.category}
-                creatorName={post.creatorName}
-                creatorProfileImage={post.creatorProfileImage}
+                authorName={post.author.username}
+                authorProfileImage={post.author.profileImg}
                 cover={post.cover}
                 updatedAt={post.updatedAt}
               />

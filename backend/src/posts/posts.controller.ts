@@ -15,10 +15,9 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage,memoryStorage } from 'multer';
-import path from 'path';
-import { v4 as uuidv4 } from 'uuid';
+import { diskStorage, memoryStorage } from 'multer';
 import { PostImageSharpPipe } from 'src/sharp.pipe';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 export const storage = {};
 

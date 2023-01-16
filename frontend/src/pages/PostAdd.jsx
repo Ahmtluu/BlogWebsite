@@ -34,12 +34,13 @@ export default function PostAdd() {
     []
   );
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     var token = cookies.get("jwt_authorization");
     var currentUser = jwt_decode(token);
     try {
-      CreatePost(data, currentUser);
-      usernavigate(`/profile/${currentUser.sub}`);
+      await CreatePost(data, currentUser).then(() =>
+        usernavigate(`/profile/${currentUser.sub}`)
+      );
     } catch (error) {
       console.log(error);
     }

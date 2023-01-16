@@ -4,9 +4,8 @@ export class CreatePostDto {
   cover: string;
   title: string;
   category: string;
-  creatorName:string;
-  creatorProfileImage:string
-  createdAt: Date;
-  updatedAt:Date;
+  author: User;
   content: any;
+  createdAt: Date;
+  updatedAt: Date;
 }

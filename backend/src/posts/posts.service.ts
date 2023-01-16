@@ -9,21 +9,20 @@ import { PostDocument, Post } from '../schemas/post.shema';
 export class PostsService {
   constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}
 
-  async create(pst: CreatePostDto, postCover: string) {
+  async create(createPostDto: CreatePostDto, postCover: string) {
     return await this.postModel
-      .findOne({ title: pst.title })
+      .findOne({ title: createPostDto.title })
       .exec()
-      .then(async (post) => {
-        if (!post) {
-          const newPost = new this.postModel(post);
-          newPost.title = pst.title;
-          newPost.content = pst.content;
+      .then(async (pst) => {
+        if (!pst) {
+          const newPost = new this.postModel(createPostDto);
+          newPost.title = createPostDto.title;
+          newPost.content = createPostDto.content;
           if (postCover) {
             newPost.cover = postCover;
           }
-          newPost.category = pst.category;
-          newPost.creatorName = pst.creatorName;
-          newPost.creatorProfileImage = pst.creatorProfileImage;
+          newPost.category = createPostDto.category;
+          newPost.author = createPostDto.author;
           newPost.createdAt = new Date();
           newPost.updatedAt = new Date();
           newPost.save();
@@ -35,18 +34,19 @@ export class PostsService {
   }
 
   findAll() {
-    return this.postModel.find().exec();
+    return this.postModel.find().populate('author').exec();
   }
 
   findOne(id: string) {
     return this.postModel
       .findOne({ _id: id })
+      .populate('author')
       .exec()
       .then(async (post) => {
         if (post) {
           return post;
         } else {
-          return "User doesn't exist!";
+          return "Post doesn't exist!";
         }
       });
   }
@@ -60,8 +60,6 @@ export class PostsService {
             foundedPost.cover = postCover;
           }
           foundedPost.title = post.title;
-          foundedPost.creatorName = post.creatorName;
-          foundedPost.creatorProfileImage = post.creatorProfileImage;
           foundedPost.category = post.category;
           foundedPost.updatedAt = new Date();
           foundedPost.content = post.content;

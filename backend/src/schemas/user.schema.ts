@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { Post } from './post.shema';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -10,10 +9,10 @@ export class User {
   profileImg: string;
 
   @Prop()
-  createdAt!: Date;
+  createdAt: Date;
 
   @Prop()
-  updatedAt!: Date;
+  updatedAt: Date;
 
   @Prop()
   username: string;
@@ -28,10 +27,10 @@ export class User {
   email: string;
 
   @Prop()
-  password: String;
+  password: string;
 
   @Prop({ default: '' })
-  about: String;
+  about: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

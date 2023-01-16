@@ -10,7 +10,7 @@ import { PostsService } from './posts.service';
     MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
     MulterModule.register({
       dest: './uploads/postImages',
-    })
+    }),
   ],
   controllers: [PostsController],
   providers: [PostsService],
