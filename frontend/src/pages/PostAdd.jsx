@@ -26,6 +26,9 @@ export default function PostAdd() {
     () => ({
       readonly: false, // all options from https://xdsoft.net/jodit/doc/,
       placeholder: "Start typings...",
+      uploader: {
+        insertImageAsBase64URI: true,
+      },
     }),
 
     []

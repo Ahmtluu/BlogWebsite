@@ -22,6 +22,9 @@ export default function PostUpdate() {
     () => ({
       readonly: false,
       placeholder: "Start typing...",
+      uploader: {
+        insertImageAsBase64URI: true,
+      },
     }),
     []
   );
