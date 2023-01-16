@@ -28,105 +28,131 @@ export default function ProfileRecent({ user }) {
   useEffect(() => {
     getReleativePost();
   }, [user]);
+  console.log(userPosts);
 
   return (
     <>
-      <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
-        <p
-          className="lead fw-normal mb-0"
-          style={{
-            color: "#495579",
-          }}
-        >
-          Your All Posts
-        </p>
-        <div className="d-flex">
-          {" "}
-          <button
-            type="button"
-            className="btn btn-outline-dark"
-            onClick={(e) => {
-              navigate("/posts/add_new");
+      <Container>
+        <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
+          <p
+            className="lead fw-normal mb-0"
+            style={{
+              color: "#495579",
             }}
           >
-            Add new
-          </button>
+            Your All Posts
+          </p>
+          <div className="d-flex">
+            {" "}
+            <button
+              type="button"
+              className="btn btn-outline-dark"
+              onClick={(e) => {
+                navigate("/posts/add_new");
+              }}
+            >
+              Add new
+            </button>
+          </div>
         </div>
-      </div>
-      <Row>
-        {userPosts ? (
-          userPosts.length > 0 ? (
-            userPosts.map((post) => {
-              return (
-                <Col md={6} lg={4} key={post._id}>
-                  <Card
-                    className="mb-4"
-                    style={{
-                      width: "100%",
-                    }}
-                  >
-                    <Link
-                      to={`/posts/${post._id}`}
-                      className="link"
-                      relative="path"
+        <Row>
+          {userPosts ? (
+            userPosts.length > 0 ? (
+              userPosts.map((post) => {
+                return (
+                  <Col md={6} lg={4} key={post._id}>
+                    <Card
+                      style={{
+                        minHeight: "24rem",
+                        marginBottom: "8px",
+                      }}
                     >
-                      <Card.Img
-                        style={{
-                          width: "100%",
-                          height: "225px",
-                          overflow: "hidden",
-                        }}
-                        variant="top"
-                        src={`http://localhost:3001/imagesPost/${post.cover}`}
-                      />
-
+                      <Link
+                        to={`/posts/${post._id}`}
+                        className="link"
+                        relative="path"
+                      >
+                        <Card.Img
+                          variant="top"
+                          src={`http://localhost:3001/imagesPost/${post.cover}`}
+                        />{" "}
+                      </Link>
                       <Card.Body>
-                        <Card.Title>{post.title}</Card.Title>
+                        <Button
+                          variant="secondary"
+                          onClick={() => {
+                            /*TODO:lowerCase category */
+                            navigator(`categories/${post.category}`);
+                          }}
+                        >
+                          {post.category}
+                        </Button>
+                        <Link
+                          to={`/posts/${post._id}`}
+                          className="link"
+                          relative="path"
+                        >
+                          <Card.Title
+                            className="mt-1"
+                            dangerouslySetInnerHTML={{ __html: post.title }}
+                          />
+                        </Link>
+                        <Card.Text
+                          dangerouslySetInnerHTML={{ __html: post.content }}
+                          className="text "
+                          style={{}}
+                        />
                       </Card.Body>
-                    </Link>
-                    <Card.Footer>
-                      <Container className="d-flex justify-content-evenly">
-                        {" "}
-                        <Button
-                          variant="dark"
-                          className="d-flex align-items-center"
-                          onClick={(e) => {
-                            navigate(`/posts/${post._id}/update`, {
-                              state: {
-                                post: post,
-                                User: user,
-                              },
-                            });
-                          }}
-                        >
-                          <FaSync className="m-1" />
-                          Update
-                        </Button>
-                        <Button
-                          variant="danger"
-                          className="d-flex align-items-center"
-                          onClick={(e) => {
-                            deleteSelectedPost(post._id);
-                          }}
-                        >
-                          <FaTrash className="m-1" />
-                          Delete{" "}
-                        </Button>
-                      </Container>
-                    </Card.Footer>
-                  </Card>
-                </Col>
-              );
-            })
+                      <Card.Footer className="text-muted bg-white">
+                        <Container className="d-flex justify-content-evenly">
+                          {" "}
+                          <Button
+                            variant="dark"
+                            className="d-flex align-items-center"
+                            onClick={(e) => {
+                              navigate(`/posts/${post._id}/update`, {
+                                state: {
+                                  post: post,
+                                  User: user,
+                                },
+                              });
+                            }}
+                          >
+                            <FaSync className="m-1" />
+                            Update
+                          </Button>
+                          <Button
+                            variant="danger"
+                            className="d-flex align-items-center"
+                            onClick={(e) => {
+                              deleteSelectedPost(post._id);
+                            }}
+                          >
+                            <FaTrash className="m-1" />
+                            Delete{" "}
+                          </Button>
+                        </Container>
+                      </Card.Footer>
+                    </Card>
+                  </Col>
+                );
+              })
+            ) : (
+              <Container>Henüz bir paylaşım yapmadın!</Container>
+            )
           ) : (
-            <Container>Henüz bir paylaşım yapmadın!</Container>
-          )
-        ) : (
-          <Container className="d-flex justify-content-center">
-            <CircularProgress size="small" variant="dotted" color="#495579" />
-          </Container>
-        )}
-      </Row>
+            <Container className="d-flex justify-content-center">
+              <CircularProgress size="small" variant="dotted" color="#495579" />
+            </Container>
+          )}
+        </Row>
+      </Container>
     </>
   );
 }
+
+/*
+
+
+
+*/

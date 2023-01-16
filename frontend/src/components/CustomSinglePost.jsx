@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Image, Row, Button } from "react-bootstrap";
+import { Col, Image, Row, Button, Card, Divider } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import "./CustomSinglePost.css";
 export default function CustomSinglePost({
@@ -14,55 +14,75 @@ export default function CustomSinglePost({
 }) {
   let navigator = useNavigate();
   updatedAt = updatedAt.substring(0, 10);
+
+  const style = {
+    card: {
+      maxWidth: 300,
+      margin: "auto",
+      transition: "0.3s",
+      boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
+      "&:hover": {
+        boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
+      },
+    },
+  };
+
   return (
     <>
       <Col md={6} lg={4} className="mb-4">
-        <Link to={`/posts/${postId}`} className="link" relative="path">
-          <div className="imageContainer">
-            <Image
-              className="cardImage img-fluid"
-              alt="cover"
+        <Card style={{ minHeight: "25rem" }}>
+          <Link to={`/posts/${postId}`} className="link" relative="path">
+            <Card.Img
+              variant="top"
               src={`http://localhost:3001/imagesPost/${cover}`}
+            />{" "}
+          </Link>
+          <Card.Body>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                /*TODO:lowerCase category */
+                navigator(`categories/${category}`);
+              }}
+            >
+              {category}
+            </Button>
+            <Link to={`/posts/${postId}`} className="link" relative="path">
+              <Card.Title dangerouslySetInnerHTML={{ __html: title }} />
+            </Link>
+            <Card.Text
+              dangerouslySetInnerHTML={{ __html: content }}
+              className="text "
+              style={{}}
             />
-          </div>
-        </Link>
-        <Button
-          className="mt-2 mb-2"
-          variant="secondary"
-          onClick={() => {
-            /*TODO:lowerCase category */
-            navigator(`categories/${category}`);
-          }}
-        >
-          {category}
-        </Button>
-        <Link to={`/posts/${postId}`} className="link" relative="path">
-          <h2 dangerouslySetInnerHTML={{ __html: title }}></h2>{" "}
-        </Link>
-        <p className="text" dangerouslySetInnerHTML={{ __html: content }}></p>
+          </Card.Body>
+          <Card.Footer className="text-muted" style={{ minHeight: "3rem" }}>
+            {" "}
+            <Link to={`/author/${authorName}`} className="link" relative="path">
+              <Row className="d-flex flex-row align-items-center justify-content-start">
+                <Col xs={2} className="px-1">
+                  {" "}
+                  {authorProfileImage ? (
+                    <div className="avatarImageColumn">
+                      <img
+                        className="avatarImage"
+                        alt="cover"
+                        src={`http://localhost:3001/imagesProfile/${authorProfileImage}`}
+                      ></img>
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
+                </Col>
 
-        <Link to={`/author/${authorName}`} className="link" relative="path">
-          <Row className="mb-2">
-            <Col md="auto">
-              {" "}
-              {authorProfileImage ? (
-                <div className="avatarImageColumn">
-                  <img
-                    className="avatarImage"
-                    alt="cover"
-                    src={`http://localhost:3001/imagesProfile/${authorProfileImage}`}
-                  ></img>
-                </div>
-              ) : (
-                <div></div>
-              )}
-            </Col>
-            <Col md="auto" className="">
-              <h6 className="m-0">{authorName}</h6>
-              <span className="text-muted">{updatedAt}</span>
-            </Col>
-          </Row>
-        </Link>
+                <Col xs={10}>
+                  <h6 className="m-0">{authorName}</h6>
+                  <span className="text-muted">{updatedAt}</span>
+                </Col>
+              </Row>
+            </Link>
+          </Card.Footer>
+        </Card>
       </Col>
     </>
   );

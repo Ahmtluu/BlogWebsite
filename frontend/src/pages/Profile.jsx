@@ -3,7 +3,7 @@ import CustomFooter from "../components/CustomFooter";
 import ProfileRecent from "../components/ProfileRecent";
 import ProfileDetail from "../components/ProfileDetail";
 import { GetCurrentUser } from "../services/UserService";
-import { Container } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import { useParams } from "react-router";
 import { CircularProgress } from "react-loading-indicators";
 
@@ -18,29 +18,25 @@ function Profile() {
   };
   useEffect(() => {
     getProfileData();
-  },[]);
+  }, []);
 
   return (
     <>
-      <div className="container">
-        <div className="row d-flex justify-content-center align-items-center h-100">
-          {currentUser ? (
-            <div className="col">
-              <ProfileDetail
-                 userId={currentUser.sub}
-              />
-              <ProfileRecent
-              user={currentUser}
-               
-              />
-            </div>
-          ) : (
-            <Container className="d-flex justify-content-center">
+      <Row className="row d-flex justify-content-center align-items-center h-100">
+        {currentUser ? (
+          <div className="col">
+            <Container>
+              <ProfileDetail userId={currentUser.sub} />{" "}
+            </Container>
+            <ProfileRecent user={currentUser} />
+          </div>
+        ) : (
+          <Container className="d-flex justify-content-center">
             <CircularProgress size="small" variant="dotted" color="#495579" />
           </Container>
-          )}
-        </div>
-      </div>
+        )}
+      </Row>
+
       <CustomFooter />
     </>
   );
