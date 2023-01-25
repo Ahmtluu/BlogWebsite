@@ -3,13 +3,16 @@ import { Modal, Button, Form, Row, Col, Image } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { UpdateUser } from "../services/UserService";
 import JoditEditor from "jodit-react";
+import ProfileImageUploader from "./ProfileImageUploader";
 
 export default function ProfileDetail({ user }) {
   const [modalShow, setModelShow] = useState(false);
   const { register, handleSubmit, setValue } = useForm();
+  const [imageModalShow, setImageShow]=useState(false);
 
   const editor = useRef(null);
   const [content, setContent] = useState();
+  
 
   useEffect(() => {
     setContent(user.about);
@@ -27,6 +30,7 @@ export default function ProfileDetail({ user }) {
     []
   );
 
+
   const onHandleChange = () => {
     setModelShow(!modalShow);
   };
@@ -36,18 +40,26 @@ export default function ProfileDetail({ user }) {
       setModelShow(!modalShow);
     });
   };
+  const onImageHandleChange=()=>{
+    setImageShow(!imageModalShow);
+  }
+
 
   return (
     <>
       <Col>
         <Row>
           <Col sm={2} xs={4}>
+            <Button className="border-0 bg-white p-0" onClick={onImageHandleChange}>
             <Image
               src={`http://localhost:3001/imagesProfile/${user.profileImg}`}
               alt="Profile"
-              fluid={true}
-              className=" rounded"
+              width="100%"
+              height="100%"
+              className="rounded"
             />
+            </Button>
+
           </Col>
           <Col sm={10} xs={8}>
             <h2 className="m-0">{user.username}</h2>
@@ -77,17 +89,6 @@ export default function ProfileDetail({ user }) {
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Profile Image</Form.Label>
-                  <input
-                    type="file"
-                    id="profileImg"
-                    className="form-control"
-                    {...register("profileImg")}
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
                   <Form.Label>Username</Form.Label>
                   <input
                     type="text"
@@ -95,6 +96,19 @@ export default function ProfileDetail({ user }) {
                     defaultValue={user.username}
                     className="form-control"
                     {...register("username")}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                {" "}
+                <Form.Group className="mb-3">
+                  <Form.Label>Email</Form.Label>
+                  <input
+                    type="email"
+                    id="formEmail"
+                    defaultValue={user.email}
+                    className="form-control"
+                    {...register("email")}
                   />
                 </Form.Group>
               </Col>
@@ -124,32 +138,10 @@ export default function ProfileDetail({ user }) {
                   />
                 </Form.Group>
               </Col>
+              
             </Row>
             <Row>
-              <Col md={6}>
-                {" "}
-                <Form.Group className="mb-3">
-                  <Form.Label>Email</Form.Label>
-                  <input
-                    type="email"
-                    id="formEmail"
-                    defaultValue={user.email}
-                    className="form-control"
-                    {...register("email")}
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Password</Form.Label>
-                  <input
-                    type="password"
-                    id="formPassword"
-                    className="form-control"
-                    {...register("password")}
-                  />
-                </Form.Group>
-              </Col>
+              
               <JoditEditor
                 ref={editor}
                 value={content}
@@ -173,6 +165,8 @@ export default function ProfileDetail({ user }) {
           </Button>
         </Modal.Footer>
       </Modal>
+
+<ProfileImageUploader imageShow={imageModalShow} currentImage={user.profileImg} onHadleChange={onImageHandleChange}/>
     </>
   );
 }

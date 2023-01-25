@@ -110,14 +110,6 @@ export class UsersService {
           user.email = usr.email;
           user.description = usr.description;
           user.about = usr.about;
-
-          if (usr.password) {
-            const match = this.checkPassword(usr.password, user.password);
-            if (match) {
-              const password = await this.hashPassword(usr.password);
-              user.password = password;
-            }
-          }
           user.save();
           return user;
         } else {
