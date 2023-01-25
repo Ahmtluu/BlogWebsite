@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Modal, Button, Form, Row, Col, Image } from "react-bootstrap";
+import { Modal, Button, Form, Row, Col, Image,Container } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { UpdateUser } from "../services/UserService";
 import JoditEditor from "jodit-react";
@@ -49,21 +49,20 @@ export default function ProfileDetail({ user }) {
     <>
       <Col>
         <Row>
-          <Col sm={2} xs={4}>
-            <Button className="border-0 bg-white p-0" onClick={onImageHandleChange}>
-            <Image
+          <Col md={4} lg={3} className="d-flex justify-content-center align-items-center">
+            <Button className="border-0 bg-white p-0 m-1 " onClick={onImageHandleChange}>
+              <Image
               src={`http://localhost:3001/imagesProfile/${user.profileImg}`}
               alt="Profile"
-              width="100%"
-              height="100%"
+              height={300} width={250}
               className="rounded"
-            />
+            />  
             </Button>
 
           </Col>
-          <Col sm={10} xs={8}>
-            <h2 className="m-0">{user.username}</h2>
-            <h5 className="mb-4 text-muted">{user.description}</h5>
+          <Col md={8} lg={9} className="d-flex flex-column justify-content-center">
+            <h2 className="m-0 text-center text-lg-start">{user.username}</h2>
+            <h5 className="mb-4 text-center text-lg-start text-muted">{user.description}</h5>
             <h6 className="text-muted m-0">About</h6>
             <p
               className="font-italic mb-1"
@@ -71,7 +70,7 @@ export default function ProfileDetail({ user }) {
             />
             <Button
               type="button"
-              className="btn btn-dark mt-2"
+              className="btn btn-dark mt-2 w-25"
               onClick={onHandleChange}
             >
               Edit profile
@@ -166,7 +165,7 @@ export default function ProfileDetail({ user }) {
         </Modal.Footer>
       </Modal>
 
-<ProfileImageUploader imageShow={imageModalShow} currentImage={user.profileImg} onHadleChange={onImageHandleChange}/>
+<ProfileImageUploader imageShow={imageModalShow} currentImage={user.profileImg} onHandleChange={onImageHandleChange}/>
     </>
   );
 }

@@ -16,7 +16,6 @@ function Profile() {
 
   return (
     <>
-      <Row className="row d-flex justify-content-center align-items-center h-100">
         {data ? (
           <div className="col">
             <Container>
@@ -29,8 +28,6 @@ function Profile() {
             <CircularProgress size="small" variant="dotted" color="#495579" />
           </Container>
         )}
-      </Row>
-
       <CustomFooter />
     </>
   );

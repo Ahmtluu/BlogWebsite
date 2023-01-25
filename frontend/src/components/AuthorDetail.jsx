@@ -7,17 +7,17 @@ export default function AuthorDetail({ currentAuthor }) {
     <>
       <Col>
         <Row>
-          <Col sm={2} xs={4}>
+          <Col md={4} lg={3} className="d-flex justify-content-center align-items-center">
             <Image
               src={`http://localhost:3001/imagesProfile/${currentAuthor.profileImg}`}
               alt="Profile"
-              fluid={true}
-              className=" rounded"
+              height={300} width={250}
+              className=" m-1 rounded"
             />
           </Col>
-          <Col sm={10} xs={8}>
-            <h2 className="m-0">{currentAuthor.username}</h2>
-            <h5 className="mb-4">{currentAuthor.description}</h5>
+          <Col md={8} lg={9} className="d-flex flex-column justify-content-center">
+            <h2 className="m-0 text-center text-lg-start">{currentAuthor.username}</h2>
+            <h5 className="mb-4 text-center text-lg-start text-muted">{currentAuthor.description}</h5>
             <h6 className="text-muted m-0">About</h6>
             <p
               className="font-italic mb-1"

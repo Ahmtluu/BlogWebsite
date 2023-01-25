@@ -22,6 +22,7 @@ export default function ProfileImageUploader({imageShow,currentImage,onHandleCha
         }
       }
 
+      console.log(onHandleChange)
 
 
       const onImageSubmitHandle = async (formD) => {
@@ -36,21 +37,22 @@ export default function ProfileImageUploader({imageShow,currentImage,onHandleCha
           <Modal.Title>Update Profile Image</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Container className="text-center">
+        <Container className="d-flex text-center justify-content-center">
             {!isUploaded ? (
               <>
                 <label htmlFor="upload-input">
-                  <img
+                  <img 
+                  className='rounded'
                     src={`http://localhost:3001/imagesProfile/${currentImage}`}
                     draggable={"false"}
                     alt="placeholder"
-                    style={{ width: 250, height: 250 }}
+                    style={{ width: 225, height: 250 }}
                   />
                   <p style={{ color: "#444" ,marginTop:"8px" }}>Click to upload image</p>
                 </label>
 
                 <input
-                hidden="true"
+                hidden={true}
                   id="upload-input"
                   type="file"
                   accept=".jpg,.jpeg,.gif,.png"
@@ -83,6 +85,7 @@ export default function ProfileImageUploader({imageShow,currentImage,onHandleCha
         <Modal.Footer>
           <Button
             variant="primary"
+   
             type="submit"
             onClick={handleSubmit(onImageSubmitHandle)}
           >
