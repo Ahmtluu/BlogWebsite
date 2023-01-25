@@ -98,7 +98,7 @@ export class UsersService {
       });
   }
 
-  update(id: string, usr: UpdateUserDto, profileImage: string) {
+  update(id: string, usr: UpdateUserDto) {
     return this.userModel
       .findOne({ id: id })
       .exec()
@@ -110,7 +110,6 @@ export class UsersService {
           user.email = usr.email;
           user.description = usr.description;
           user.about = usr.about;
-          if (profileImage) user.profileImg = profileImage;
 
           if (usr.password) {
             const match = this.checkPassword(usr.password, user.password);
@@ -125,6 +124,10 @@ export class UsersService {
           return "User doesn't exist!";
         }
       });
+  }
+
+  updateProfileImage(id:string, profileImage:string){
+    return this.userModel.findByIdAndUpdate({_id:id},{ profileImg: profileImage })
   }
 
   remove(id: string) {

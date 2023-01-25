@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import PostDetail from "./pages/PostDetail";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
-import CustomNavbar from "./components/CustomNavbar";
+import NavigationBar from "./components/NavigationBar";
 import ProtectedRoutes from "./ProtectedRoutes";
 import CategorisedPost from "./pages/CategorisedPost";
 import Author from "./pages/Author";
@@ -18,7 +18,7 @@ function App() {
   let isLoggedIn = cookies.get("isAuth");
   return (
     <>
-      <CustomNavbar />
+      <NavigationBar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="posts/:_id" element={<PostDetail />} />

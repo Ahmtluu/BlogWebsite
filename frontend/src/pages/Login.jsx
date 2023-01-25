@@ -43,7 +43,7 @@ function Login() {
             className="w-75 align-items-center "
           >
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email Adresi</Form.Label>
+              <Form.Label>Email Address</Form.Label>
               <input
                 type="text"
                 className="form-control"
@@ -52,7 +52,7 @@ function Login() {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Şifre</Form.Label>
+              <Form.Label>Password</Form.Label>
               <input
                 type="password"
                 className="form-control"

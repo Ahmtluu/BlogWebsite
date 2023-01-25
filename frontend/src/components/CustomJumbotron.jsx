@@ -7,7 +7,7 @@ export default function CustomCarrousel() {
     imageContainer: {
       overflow: "hidden",
       borderRadius: "10px",
-      height: "100vh",
+      height: "90vh",
     },
     image: {
       width: "100%",
@@ -17,18 +17,13 @@ export default function CustomCarrousel() {
   };
 
   return (
-    <Row className="mx-2">
-      <Col md={6} className="align-self-center">
+    <Row className="mx-4">
+      <Col md={7} className="d-flex flex-column align-items-center  justify-content-center ">
         <h1 className="display-3 fst-italic bold  ">
           Cours Après Tes Rêves...
         </h1>
-        <p className="lead my-3">
-          Multiple lines of text that form the lede, informing new readers
-          quickly and efficiently about what’s most interesting in this post’s
-          contents.
-        </p>
       </Col>
-      <Col md={6}>
+      <Col md={5}>
         <Container fluid style={styles.imageContainer}>
           <Image style={styles.image} src={jumbotronImage} />
         </Container>

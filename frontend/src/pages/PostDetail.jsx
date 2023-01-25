@@ -4,32 +4,19 @@ import { Container } from "react-bootstrap";
 import { GetPost } from "../services/PostService";
 import { Image } from "react-bootstrap";
 import { CircularProgress } from "react-loading-indicators";
+import { useFetchSinglePostQuery } from "../features/posts/postApiSlice";
 
 function PostDetail() {
-  const [currentPost, setCurrentPost] = useState();
-  let params = useParams();
-  let id = params._id;
-
-  useEffect(() => {
-    const getSelectedPost = async () => {
-      const response = await GetPost(id);
-      setCurrentPost(response);
-    };
-    getSelectedPost();
-  });
-
-  if (!currentPost) {
-    return (
-      <Container className="d-flex justify-content-center mt-2">
-        <CircularProgress size="small" variant="dotted" color="#495579" />
-      </Container>
-    );
-  }
+  const {_id} = useParams();
+    const {data=[], isFetching} =useFetchSinglePostQuery(_id)
   return (
+    isFetching ? <Container className="d-flex justify-content-center mt-2">
+    <CircularProgress size="small" variant="dotted" color="#495579" />
+  </Container>:
     <Container>
-      <h5>{currentPost.title}</h5>
+      <h5>{data.title}</h5>
       {}
-      <div dangerouslySetInnerHTML={{ __html: currentPost.content }}></div>
+      <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
     </Container>
   );
 }

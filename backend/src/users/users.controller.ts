@@ -52,9 +52,15 @@ export class UsersController {
   update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
-    @UploadedFile(ProfileImageSharpPipe) profileImage: string,
   ) {
-    return this.usersService.update(id, updateUserDto, profileImage);
+    return this.usersService.update(id, updateUserDto);
+  }
+
+  @Patch(':id/updatePic')
+  updateProfileImage( 
+    @Param('id') id: string,
+    @UploadedFile(ProfileImageSharpPipe) profileImage: string){
+    return this.usersService.updateProfileImage(id,profileImage)
   }
 
   @UseGuards(JwtAuthGuard)

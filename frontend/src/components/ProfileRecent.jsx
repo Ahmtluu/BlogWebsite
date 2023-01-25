@@ -28,7 +28,6 @@ export default function ProfileRecent({ user }) {
   useEffect(() => {
     getReleativePost();
   }, [user]);
-  console.log(userPosts);
 
   return (
     <>

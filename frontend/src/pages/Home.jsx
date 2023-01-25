@@ -1,7 +1,7 @@
 import React from "react";
 import CustomJumbotron from "../components/CustomJumbotron";
 import CustomFooter from "../components/CustomFooter";
-import CustomPosts from "../components/CustomPosts";
+import PostList from "../components/PostList";
 import { AnimationOnScroll } from "react-animation-on-scroll";
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
     <>
       <CustomJumbotron />
       <AnimationOnScroll animateIn="animate__fadeIn">
-        <CustomPosts />
+        <PostList />
       </AnimationOnScroll>
       <CustomFooter />
     </>

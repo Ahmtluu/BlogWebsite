@@ -6,7 +6,7 @@ import { cookies } from "../services/UserService";
 import jwt_decode from "jwt-decode";
 import { GetCurrentUser } from "../services/UserService";
 
-function CustomNavbar() {
+function NavigationBar() {
   const pathname = window.location.pathname;
   const navigate = useNavigate();
   let isLoggedIn = cookies.get("isAuth");
@@ -89,4 +89,4 @@ function CustomNavbar() {
     </Navbar>
   );
 }
-export default CustomNavbar;
+export default NavigationBar;
